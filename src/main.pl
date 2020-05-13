@@ -1,6 +1,7 @@
 use_module(library(csv)).
 
-:- dynamic adjacencia/2.
+:- dynamic adjacencia/3.
+:- dynamic nodo/3.
 
 adjacencia(1,2).
 adjacencia(2,1).
@@ -35,40 +36,96 @@ carrega_csv(Nome_CSV):-
 
 processa_adjacencias([fact(Id,Gid,Latitude,Longitude,Estado,Tipo,Publicidade,Operador,Carreia,Codigo,Nome,Freguesia),
                         fact(Id2,Gid2,Latitude2,Longitude2,Estado2,Tipo2,Publicidade2,Operador2,Carreia2,Codigo2,Nome2,Freguesia2)|T]):-
-                        assert(adjacencia(Gid,Gid2)),
+                        distancia_euclidiana(Latitude,Latitude2,Longitude,Longitude2,Distancia),
+  
+                        assert(adjacencia(Gid,Gid2,Distancia)),
+                        assert(nodo(Gid,Latitude,Longitude)),
+                        assert(nodo(Gid2,Latitude2,Longitude2)),
                         write(Gid),
                         write("->"),
                         write(Gid2),
+                        write(" ,distância: "),
+                        write(Distancia),
                         write("\n"),
                         processa_adjacencias([fact(Id2,Gid2,Latitude2,Longitude2,Estado2,Tipo2,Publicidade2,Operador2,Carreia2,Codigo2,Nome2,Freguesia2)|T]).
 
 processa_adjacencias([_]).
 
 
+distancia_euclidiana(X1,X2,Y1,Y2, R):- R is sqrt((X2-X1)^2 + (Y2-Y1)^2).
 
 
 
-resolve_df( Start, End ,Solution)  :-
-    depthfirst( [], Start, End,Solution1),
+resolve_df( Start, End ,Solution,Custo)  :-
+    depthfirst( [], Start, End,Solution1,Custo),
     reverse(Solution1,Solution).
 
   
   % depthfirst( Path, Node, Solution):
   %   extending the path [Node | Path] to a goal gives Solution
   
-depthfirst( Path, End, End, [End | Path] ).
+depthfirst( Path, End, End, [End | Path],0).
 
-depthfirst( Path, Node, End, Sol)  :-
-adjacencia( Node, Node1),
-\+ member( Node1, Path),
-depthfirst( [Node | Path], Node1,End,Sol).
+depthfirst( Path, Node, End, Sol,Custo)  :-
+    adjacencia( Node, Node1,Distancia),
+    \+ member( Node1, Path),
+    depthfirst( [Node | Path], Node1,End,Sol,Custo1),
+    Custo is Distancia + Custo1.
   
 
-inverte_lista([],Z,Z).
-inverte_lista([Head|Tail],Z,Acc) :- inverte_lista(Tail,Z,[Head|Acc]).
 
 
 dfTodasSolucoes(L,Start,End):- findall((S),(resolve_df(Start,End,S)),L).
 
 
-distancia_euclidiana(X1,X2,Y1,Y2, R):- R is sqrt((X2-X1)^2 + (Y2-Y1)^2).
+estima(Nodo1,Nodo2,Estimativa):-
+    nodo(Nodo1,Latitude1,Longitude1),
+    nodo(Nodo2,Latitude2,Longitude2),
+    distancia_euclidiana(Latitude1,Latitude2,Longitude1,Longitude2,Estimativa).
+
+
+
+
+
+goal(182).
+
+resolve_gulosa(Partida, Destino,Caminho/Custo) :-
+	estima(Partida,Destino ,Estimativa),
+	agulosa([[Partida]/0/Estimativa],Destino,InvCaminho/Custo/_),
+	reverse(InvCaminho, Caminho).
+
+agulosa(Caminhos, Destino ,Caminho) :-
+	obtem_melhor_g(Caminhos, Caminho),
+    Caminho = [Nodo|_]/_/_
+    ,Nodo == Destino.
+
+agulosa(Caminhos, Destino ,SolucaoCaminho) :-
+	obtem_melhor_g(Caminhos,MelhorCaminho),
+	seleciona(MelhorCaminho, Caminhos, OutrosCaminhos),
+	expande_gulosa(MelhorCaminho, ExpCaminhos,Destino),
+	append(OutrosCaminhos, ExpCaminhos, NovoCaminhos),
+        agulosa(NovoCaminhos,Destino ,SolucaoCaminho).	
+
+
+expande_gulosa(Caminho, ExpCaminhos, Destino) :-
+    findall(NovoCaminho, adjacente(Caminho,NovoCaminho,Destino), ExpCaminhos).
+
+
+adjacente([Nodo|Caminho]/Custo/_, [ProxNodo,Nodo|Caminho]/NovoCusto/Est,Destino) :-
+    adjacencia(Nodo, ProxNodo, PassoCusto),\+ member(ProxNodo, Caminho),
+    NovoCusto is Custo + PassoCusto,
+    estima(ProxNodo,Destino ,Est).
+
+
+seleciona(E, [E|Xs], Xs).
+seleciona(E, [X|Xs], [X|Ys]) :- seleciona(E, Xs, Ys).
+
+
+obtem_melhor_g([Caminho], Caminho) :- !.
+
+obtem_melhor_g([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
+	Est1 =< Est2, !,
+	obtem_melhor_g([Caminho1/Custo1/Est1|Caminhos], MelhorCaminho).
+	
+obtem_melhor_g([_|Caminhos], MelhorCaminho) :- 
+	obtem_melhor_g(Caminhos, MelhorCaminho).

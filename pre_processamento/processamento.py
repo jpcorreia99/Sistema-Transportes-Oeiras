@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from pandas import Series
 
 
@@ -20,6 +21,17 @@ def muda_encoding(df):
 
     return df
 
+def processa_nans(df):
+    colunas_onde_se_elimina = ["gid","latitude","longitude","Carreira"]
+
+    df = df.dropna(subset = colunas_onde_se_elimina)
+    # nas restantes colunas substitui por Desconhecido
+    df = df.replace(np.nan,'Desconhecido', regex=True)
+
+    return df
+
+
+
 # Função responsável por resolver o encoding no ficheiro de paragens
 def processa_excel_paragens():
     df = pd.read_excel("dataset_nao_processado/paragem_autocarros_oeiras_processado_4.xlsx")
@@ -34,11 +46,9 @@ def processa_excel_adjacencia():
     nome_das_sheets = ficheiro_excel.sheet_names
     for nome_de_sheet in nome_das_sheets:
         df = ficheiro_excel.parse(nome_de_sheet)  
+        df = processa_nans(df)
         df = muda_encoding(df)
         df.to_csv("dataset_processado/"+nome_de_sheet+".csv", header=False, sep=";")
 
 
 processa_excel_adjacencia()
-
-
-#processa_excel_paragens()
