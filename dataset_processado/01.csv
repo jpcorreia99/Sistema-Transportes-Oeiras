@@ -18,22 +18,22 @@
 17;242;-104235.94;-96573.14;Bom;Fechado dos Lados;Yes;Vimeca;1;1279;Avenida Tomás Ribeiro;Carnaxide e Queijas
 18;255;-104240.6;-96543.14;Bom;Fechado dos Lados;Yes;Vimeca;1;1279;Avenida Tomás Ribeiro;Carnaxide e Queijas
 19;604;-104256.82;-95173.34;Bom;Fechado dos Lados;No;Vimeca;1;306;Rua dos Cravos de Abril;Carnaxide e Queijas
-20;628;-104278.8866659752;-94122.56603635015;Bom;Sem Abrigo;No;Vimeca;1;1123;Rua da Quinta do Paizinho;Carnaxide e Queijas
+20;628;-104278.886665975;-94122.5660363502;Bom;Sem Abrigo;No;Vimeca;1;1123;Rua da Quinta do Paizinho;Carnaxide e Queijas
 21;39;-104282.32;-95055.6;Bom;Fechado dos Lados;Yes;Vimeca;1;306;Rua dos Cravos de Abril;Carnaxide e Queijas
 22;50;-104287.85;-94105.37;Bom;Fechado dos Lados;Yes;Vimeca;1;1123;Rua da Quinta do Paizinho;Carnaxide e Queijas
 23;599;-104296.72;-95828.26;Bom;Fechado dos Lados;Yes;Vimeca;1;327;Avenida do Forte;Carnaxide e Queijas
 24;40;-104302.13;-95043.86;Bom;Fechado dos Lados;Yes;Vimeca;1;306;Rua dos Cravos de Abril;Carnaxide e Queijas
-25;985;-104367.95010080477;-95373.18330437149;Bom;Sem Abrigo;No;Vimeca;1;1237;Avenida Professor Dr. Bernardino Machado;Carnaxide e Queijas
+25;985;-104367.950100805;-95373.1833043715;Bom;Sem Abrigo;No;Vimeca;1;1237;Avenida Professor Dr. Bernardino Machado;Carnaxide e Queijas
 26;608;-104373.51;-95357.73;Bom;Fechado dos Lados;Yes;Vimeca;1;1237;Avenida Professor Dr. Bernardino Machado;Carnaxide e Queijas
 27;249;-104397.14;-96680.46;Bom;Fechado dos Lados;Yes;Vimeca;1;297;Rua Carlos Wallenstein;Carnaxide e Queijas
-28;254;-104407.0;-96522.21;Bom;Fechado dos Lados;Yes;Vimeca;1;1279;Avenida Tomás Ribeiro;Carnaxide e Queijas
+28;254;-104407;-96522.21;Bom;Fechado dos Lados;Yes;Vimeca;1;1279;Avenida Tomás Ribeiro;Carnaxide e Queijas
 29;622;-104445.64;-94921.33;Bom;Fechado dos Lados;No;Vimeca;1;1134;Largo Sete de Junho de 1759;Carnaxide e Queijas
 30;51;-104458.04;-94329.86;Bom;"Fechado dos Lados
 ";No;Vimeca;1;1123;Rua da Quinta do Paizinho;Carnaxide e Queijas
 31;44;-104458.52;-94926.22;Bom;Fechado dos Lados;Yes;Vimeca;1;1134;Largo Sete de Junho de 1759;Carnaxide e Queijas
 32;251;-104487.69;-96548.01;Bom;Fechado dos Lados;Yes;Vimeca;1;1279;Avenida Tomás Ribeiro;Carnaxide e Queijas
-33;38;-104497.842173306;-94358.90888110301;Bom;Fechado dos Lados;Yes;Vimeca;1;1123;Rua da Quinta do Paizinho;Carnaxide e Queijas
-34;620;-104565.8832899218;-94653.67859291832;Bom;Sem Abrigo;No;Vimeca;1;365;Estrada da Portela;Carnaxide e Queijas
+33;38;-104497.842173306;-94358.908881103;Bom;Fechado dos Lados;Yes;Vimeca;1;1123;Rua da Quinta do Paizinho;Carnaxide e Queijas
+34;620;-104565.883289922;-94653.6785929183;Bom;Sem Abrigo;No;Vimeca;1;365;Estrada da Portela;Carnaxide e Queijas
 35;45;-104578.88;-94652.12;Bom;Sem Abrigo;No;Vimeca;1;365;Estrada da Portela;Carnaxide e Queijas
 36;614;-104594.97;-95684.18;Bom;Fechado dos Lados;No;Vimeca;1;359;Rua Nossa Senhora da Conceição;Carnaxide e Queijas
 37;46;-104609.99;-95693.01;Bom;Fechado dos Lados;Yes;Vimeca;1;359;Rua Nossa Senhora da Conceição;Carnaxide e Queijas
@@ -64,14 +64,15 @@
 62;486;-106325.58;-96320.92;Bom;Fechado dos Lados;Yes;Vimeca;1;1289;Rua Castro Soromenho;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
 63;487;-106449.51;-96435.13;Bom;Sem Abrigo;No;Vimeca;1;1292;Rua Manuel Ferreira;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
 64;488;-106492.31;-96447.01;Bom;Sem Abrigo;No;Vimeca;1;1292;Rua Manuel Ferreira;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-65;469;-106613.44;-96288.0;Bom;Fechado dos Lados;Yes;Vimeca;1;1288;Rua Rodrigo Albuquerque e Melo;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
+65;469;-106613.44;-96288;Bom;Fechado dos Lados;Yes;Vimeca;1;1288;Rua Rodrigo Albuquerque e Melo;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
 66;462;-106636.23;-96302.04;Bom;Sem Abrigo;No;Vimeca;1;1288;Rua Rodrigo Albuquerque e Melo;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
 67;480;-106757.3;-96240.22;Bom;Sem Abrigo;No;Vimeca;1;389;Rua São João de Deus;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
 68;494;-106803.2;-96265.84;Bom;Sem Abrigo;No;Vimeca;1;389;Rua São João de Deus;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-69;957;-106911.18264993648;-96261.15727273724;Bom;Sem Abrigo;No;Vimeca;1;399;Escadinhas da Fonte da Maruja;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
+69;957;-106911.182649936;-96261.1572727372;Bom;Sem Abrigo;No;Vimeca;1;399;Escadinhas da Fonte da Maruja;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
 70;465;-106915.82;-96269.57;Bom;Sem Abrigo;No;Vimeca;1;369;Rua Direita do Dafundo;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
 71;186;-106975.22;-95602.61;Bom;Fechado dos Lados;No;Vimeca;1;118;Alameda Hermano Patrone;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
 72;466;-106999.08;-96066.1;Bom;Fechado dos Lados;No;Vimeca;1;369;Rua Direita do Dafundo;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
 73;467;-107004.52;-96080.98;Bom;Fechado dos Lados;No;Vimeca;1;369;Rua Direita do Dafundo;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
 74;78;-107008.56;-95490.23;Bom;Fechado dos Lados;Yes;Vimeca;1;118;Alameda Hermano Patrone;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
 75;79;-107011.55;-95214.57;Bom;Fechado dos Lados;Yes;Vimeca;1;103;Rua Damião de Góis;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
+76;745;-102136.134851608;-98663.3088020764;Bom;Fechado dos Lados;No;Vimeca;2;216;Estrada Consiglieri Pedroso;Barcarena

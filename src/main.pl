@@ -1,11 +1,12 @@
 use_module(library(csv)).
 
-:- dynamic adjacencia/3.
+%NOTA: APAGAR ÚLTIMA LINHA DO CSV 01
+%TODO: corrigir excel grande, eliminar quando a carreira é desconhecida e "talvez" operadora
+% ligações a pé?
+
+:- dynamic adjacencia/4.
 :- dynamic nodo/3.
 
-adjacencia(1,2).
-adjacencia(2,1).
-adjacencia(2,3).
 
 change_working_directory():-
     working_directory(_,'Universidade/3º Ano/2º Semestre/SRCR/').
@@ -34,11 +35,11 @@ carrega_csv(Nome_CSV):-
 
 
 
-processa_adjacencias([fact(Id,Gid,Latitude,Longitude,Estado,Tipo,Publicidade,Operador,Carreia,Codigo,Nome,Freguesia),
+processa_adjacencias([fact(Id,Gid,Latitude,Longitude,Estado,Tipo,Publicidade,Operador,Carreira,Codigo,Nome,Freguesia),
                         fact(Id2,Gid2,Latitude2,Longitude2,Estado2,Tipo2,Publicidade2,Operador2,Carreia2,Codigo2,Nome2,Freguesia2)|T]):-
                         distancia_euclidiana(Latitude,Latitude2,Longitude,Longitude2,Distancia),
   
-                        assert(adjacencia(Gid,Gid2,Distancia)),
+                        assert(adjacencia(Gid,Gid2,Distancia,Carreira)),
                         assert(nodo(Gid,Latitude,Longitude)),
                         assert(nodo(Gid2,Latitude2,Longitude2)),
                         write(Gid),
@@ -64,12 +65,13 @@ resolve_df( Start, End ,Solution,Custo)  :-
   % depthfirst( Path, Node, Solution):
   %   extending the path [Node | Path] to a goal gives Solution
   
-depthfirst( Path, End, End, [End | Path],0).
+depthfirst( Path, Node, End, [(End,Carreira) | Path],Custo):-
+    adjacencia(Node,End,Custo,Carreira).
 
 depthfirst( Path, Node, End, Sol,Custo)  :-
-    adjacencia( Node, Node1,Distancia),
+    adjacencia( Node, Node1,Distancia,Carreira),
     \+ member( Node1, Path),
-    depthfirst( [Node | Path], Node1,End,Sol,Custo1),
+    depthfirst( [(Node,Carreira) | Path], Node1,End,Sol,Custo1),
     Custo is Distancia + Custo1.
   
 
