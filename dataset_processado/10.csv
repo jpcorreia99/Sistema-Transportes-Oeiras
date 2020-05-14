@@ -1,63 +1,62 @@
-0;183;-103678.36;-96590.26;Bom;Fechado dos Lados;Yes;Vimeca;10;286;Rua Aquilino Ribeiro;Carnaxide e Queijas
-1;791;-103705.46;-96673.6;Bom;Aberto dos Lados;Yes;Vimeca;10;286;Rua Aquilino Ribeiro;Carnaxide e Queijas
-2;595;-103725.69;-95975.2;Bom;Fechado dos Lados;Yes;Vimeca;10;354;Rua Manuel Teixeira Gomes;Carnaxide e Queijas
-3;182;-103746.76;-96396.66;Bom;Fechado dos Lados;Yes;SCoTTURB;10;286;Rua Aquilino Ribeiro;Carnaxide e Queijas
-4;181;-103780.59;-96372.2;Bom;Aberto dos Lados;Yes;Vimeca;10;286;Rua Aquilino Ribeiro;Carnaxide e Queijas
-5;180;-103842.39;-96260.96;Bom;Fechado dos Lados;Yes;Vimeca;10;286;Rua Aquilino Ribeiro;Carnaxide e Queijas
-6;594;-103879.91;-95751.23;Bom;Fechado dos Lados;No;Vimeca;10;1116;Avenida Professor Dr. Reinaldo dos Santos;Carnaxide e Queijas
-7;185;-103922.82;-96235.62;Bom;Fechado dos Lados;Yes;SCoTTURB;10;354;Rua Manuel Teixeira Gomes;Carnaxide e Queijas
-8;89;-103934.24;-96642.56;Bom;Fechado dos Lados;Yes;Vimeca;10;1113;Avenida de Portugal;Carnaxide e Queijas
-9;107;-103972.32;-95981.88;Bom;Fechado dos Lados;Yes;Vimeca;10;1113;Avenida de Portugal;Carnaxide e Queijas
-10;250;-104031.08;-96173.83;Bom;Fechado dos Lados;Yes;Vimeca;10;1113;Avenida de Portugal;Carnaxide e Queijas
-11;261;-104032.88;-96536.98;Bom;Fechado dos Lados;Yes;Vimeca;10;1113;Avenida de Portugal;Carnaxide e Queijas
-12;597;-104058.98;-95839.14;Bom;Fechado dos Lados;Yes;Vimeca;10;1137;Rua Tenente-General Zeferino Sequeira;Carnaxide e Queijas
-13;953;-104075.89;-95771.82;Bom;Fechado dos Lados;Yes;Vimeca;10;1116;Avenida Professor Dr. Reinaldo dos Santos;Carnaxide e Queijas
-14;605;-104199.74;-95517.44;Bom;Fechado dos Lados;Yes;Vimeca;10;361;Estrada de Outurela;Carnaxide e Queijas
-15;606;-104223.76;-95501.56;Bom;Fechado dos Lados;Yes;Vimeca;10;361;Estrada de Outurela;Carnaxide e Queijas
-16;609;-104226.49;-95797.22;Bom;Fechado dos Lados;Yes;Vimeca;10;327;Avenida do Forte;Carnaxide e Queijas
-17;82;-104255.84;-95234.54;Bom;Fechado dos Lados;No;Vimeca;10;306;Rua dos Cravos de Abril;Carnaxide e Queijas
-18;604;-104256.82;-95173.34;Bom;Fechado dos Lados;No;Vimeca;10;306;Rua dos Cravos de Abril;Carnaxide e Queijas
-19;628;-104278.8866659752;-94122.56603635015;Bom;Sem Abrigo;No;Vimeca;10;1123;Rua da Quinta do Paizinho;Carnaxide e Queijas
-20;39;-104282.32;-95055.6;Bom;Fechado dos Lados;Yes;Vimeca;10;306;Rua dos Cravos de Abril;Carnaxide e Queijas
-21;50;-104287.85;-94105.37;Bom;Fechado dos Lados;Yes;Vimeca;10;1123;Rua da Quinta do Paizinho;Carnaxide e Queijas
-22;599;-104296.72;-95828.26;Bom;Fechado dos Lados;Yes;Vimeca;10;327;Avenida do Forte;Carnaxide e Queijas
-23;40;-104302.13;-95043.86;Bom;Fechado dos Lados;Yes;Vimeca;10;306;Rua dos Cravos de Abril;Carnaxide e Queijas
-24;622;-104445.64;-94921.33;Bom;Fechado dos Lados;No;Vimeca;10;1134;Largo Sete de Junho de 1759;Carnaxide e Queijas
-25;51;-104458.04;-94329.86;Bom;"Fechado dos Lados
-";No;Vimeca;10;1123;Rua da Quinta do Paizinho;Carnaxide e Queijas
-26;38;-104497.842173306;-94358.90888110301;Bom;Fechado dos Lados;Yes;Vimeca;10;1123;Rua da Quinta do Paizinho;Carnaxide e Queijas
-27;620;-104565.8832899218;-94653.67859291832;Bom;Sem Abrigo;No;Vimeca;10;365;Estrada da Portela;Carnaxide e Queijas
-28;45;-104578.88;-94652.12;Bom;Sem Abrigo;No;Vimeca;10;365;Estrada da Portela;Carnaxide e Queijas
-29;602;-104677.06;-94473.47;Bom;Fechado dos Lados;No;Vimeca;10;1160;Rua Cincinato da Costa;Carnaxide e Queijas
-30;601;-104683.1;-94486.15;Bom;Fechado dos Lados;No;Vimeca;10;1160;Rua Cincinato da Costa;Carnaxide e Queijas
-31;860;-105051.07;-96033.67;Bom;Fechado dos Lados;Yes;Vimeca;10;416;Alameda António Sérgio;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-32;861;-105093.87;-96039.61;Bom;Fechado dos Lados;Yes;Vimeca;10;416;Alameda António Sérgio;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-33;359;-105204.46;-96026.88;Bom;Fechado dos Lados;Yes;Vimeca;10;430;Avenida Carolina Michaelis;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-34;349;-105225.66;-96048.66;Bom;Fechado dos Lados;Yes;Vimeca;10;407;Rua Amaro Monteiro;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-35;29;-105256.47;-95349.66;Bom;Fechado dos Lados;Yes;Vimeca;10;113;Alameda FerNo Lopes;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-36;646;-105261.03;-95520.31;Bom;Sem Abrigo;No;Vimeca;10;124;Avenida José Gomes Ferreira;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-37;642;-105268.05;-95547.68;Bom;Fechado dos Lados;Yes;Vimeca;10;124;Avenida José Gomes Ferreira;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-38;30;-105300.44;-95336.46;Bom;Fechado dos Lados;Yes;Vimeca;10;113;Alameda FerNo Lopes;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-39;17;-105324.76833309476;-95632.26166661378;Bom;Sem Abrigo;No;Vimeca;10;416;Alameda António Sérgio;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-40;643;-105325.87;-95135.44;Bom;Fechado dos Lados;Yes;Vimeca;10;113;Alameda FerNo Lopes;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-41;20;-105353.27;-95172.19;Bom;Fechado dos Lados;Yes;Vimeca;10;113;Alameda FerNo Lopes;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-42;36;-105377.78526436003;-95633.40710368946;Bom;Sem Abrigo;No;Vimeca;10;416;Alameda António Sérgio;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-43;638;-105456.01;-94993.65;Bom;Fechado dos Lados;Yes;Vimeca;10;116;Avenida General Norton de Matos;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-44;637;-105462.27;-94976.17;Bom;Fechado dos Lados;Yes;Vimeca;10;116;Avenida General Norton de Matos;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-45;361;-105510.18;-96017.31;Bom;Fechado dos Lados;No;Vimeca;10;430;Avenida Carolina Michaelis;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-46;362;-105538.35;-96008.83;Bom;Fechado dos Lados;Yes;Vimeca;10;430;Avenida Carolina Michaelis;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-47;37;-105549.2006707616;-95690.84269383312;Bom;Fechado dos Lados;Yes;Vimeca;10;430;Avenida Carolina Michaelis;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-48;26;-105556.0408335595;-95684.40583339431;Bom;Sem Abrigo;No;Vimeca;10;430;Avenida Carolina Michaelis;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-49;27;-105587.02;-95875.21;Bom;Fechado dos Lados;Yes;Vimeca;10;430;Avenida Carolina Michaelis;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-50;28;-105593.51;-95907.44;Bom;Aberto dos Lados;No;Vimeca;10;430;Avenida Carolina Michaelis;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-51;641;-105655.76;-95028.52;Bom;Fechado dos Lados;Yes;Vimeca;10;116;Avenida General Norton de Matos;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-52;635;-105696.83;-95075.27;Bom;Fechado dos Lados;Yes;Vimeca;10;116;Avenida General Norton de Matos;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-53;679;-106071.42513405527;-95039.14634930693;Bom;Fechado dos Lados;Yes;Vimeca;10;10;Avenida dos Bombeiros Voluntários de Algés;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-54;688;-106112.34689956292;-95027.73434321096;Bom;Fechado dos Lados;Yes;Vimeca;10;10;Avenida dos Bombeiros Voluntários de Algés;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-55;675;-106288.85;-95136.57;Bom;Fechado dos Lados;Yes;Vimeca;10;10;Avenida dos Bombeiros Voluntários de Algés;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-56;72;-106342.5;-95131.58;Bom;Fechado dos Lados;Yes;Vimeca;10;10;Avenida dos Bombeiros Voluntários de Algés;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-57;75;-106560.62;-95186.03;Bom;Aberto dos Lados;Yes;Vimeca;10;10;Avenida dos Bombeiros Voluntários de Algés;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-58;671;-106568.5;-95165.9;Bom;Fechado dos Lados;Yes;Vimeca;10;10;Avenida dos Bombeiros Voluntários de Algés;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-59;657;-106786.85846811836;-95149.7421827531;Bom;Fechado dos Lados;Yes;Vimeca;10;155;Praça Doutor Manuel Martins;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-60;70;-106799.63;-95251.22;Bom;Sem Abrigo;No;Vimeca;10;155;Praça Doutor Manuel Martins;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
-61;526;-107061.05;-95215.0;Bom;Fechado dos Lados;Yes;Vimeca;10;102;Largo Dom Manuel I;Algés, Linda-a-Velha e Cruz Quebrada-Dafundo
+0;183;-103678.36;-96590.26;10
+1;791;-103705.46;-96673.6;10
+2;595;-103725.69;-95975.2;10
+3;182;-103746.76;-96396.66;10
+4;181;-103780.59;-96372.2;10
+5;180;-103842.39;-96260.96;10
+6;594;-103879.91;-95751.23;10
+7;185;-103922.82;-96235.62;10
+8;89;-103934.24;-96642.56;10
+9;107;-103972.32;-95981.88;10
+10;250;-104031.08;-96173.83;10
+11;261;-104032.88;-96536.98;10
+12;597;-104058.98;-95839.14;10
+13;953;-104075.89;-95771.82;10
+14;605;-104199.74;-95517.44;10
+15;606;-104223.76;-95501.56;10
+16;609;-104226.49;-95797.22;10
+17;82;-104255.84;-95234.54;10
+18;604;-104256.82;-95173.34;10
+19;628;-104278.8866659752;-94122.56603635015;10
+20;39;-104282.32;-95055.6;10
+21;50;-104287.85;-94105.37;10
+22;599;-104296.72;-95828.26;10
+23;40;-104302.13;-95043.86;10
+24;622;-104445.64;-94921.33;10
+25;51;-104458.04;-94329.86;10
+26;38;-104497.842173306;-94358.90888110301;10
+27;620;-104565.8832899218;-94653.67859291832;10
+28;45;-104578.88;-94652.12;10
+29;602;-104677.06;-94473.47;10
+30;601;-104683.1;-94486.15;10
+31;860;-105051.07;-96033.67;10
+32;861;-105093.87;-96039.61;10
+33;359;-105204.46;-96026.88;10
+34;349;-105225.66;-96048.66;10
+35;29;-105256.47;-95349.66;10
+36;646;-105261.03;-95520.31;10
+37;642;-105268.05;-95547.68;10
+38;30;-105300.44;-95336.46;10
+39;17;-105324.76833309476;-95632.26166661378;10
+40;643;-105325.87;-95135.44;10
+41;20;-105353.27;-95172.19;10
+42;36;-105377.78526436003;-95633.40710368946;10
+43;638;-105456.01;-94993.65;10
+44;637;-105462.27;-94976.17;10
+45;361;-105510.18;-96017.31;10
+46;362;-105538.35;-96008.83;10
+47;37;-105549.2006707616;-95690.84269383312;10
+48;26;-105556.0408335595;-95684.40583339431;10
+49;27;-105587.02;-95875.21;10
+50;28;-105593.51;-95907.44;10
+51;641;-105655.76;-95028.52;10
+52;635;-105696.83;-95075.27;10
+53;679;-106071.42513405527;-95039.14634930693;10
+54;688;-106112.34689956292;-95027.73434321096;10
+55;675;-106288.85;-95136.57;10
+56;72;-106342.5;-95131.58;10
+57;75;-106560.62;-95186.03;10
+58;671;-106568.5;-95165.9;10
+59;657;-106786.85846811836;-95149.7421827531;10
+60;70;-106799.63;-95251.22;10
+61;526;-107061.05;-95215.0;10
