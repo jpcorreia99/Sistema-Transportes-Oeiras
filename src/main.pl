@@ -25,28 +25,58 @@ depthfirst( Caminho, Paragem, End, Solucao,Distancia)  :-
 
 %ex2 Selecionar apenas algumas paragens
 
-%183->191 : Vimeca
+%183->182 : Vimeca
 
-resolve_df_operadores( Comeco, Destino,ListaOperadores ,Solucao,Distancia)  :-
-    depth_first_operadores( [], Comeco, Destino,ListaOperadores,SolucaoInvertida,Distancia),
+resolve_df_seleciona_operadores( Comeco, Destino,ListaOperadores ,Solucao,Distancia)  :-
+    depth_first_seleciona_operadores( [], Comeco, Destino,ListaOperadores,SolucaoInvertida,Distancia),
     reverse(SolucaoInvertida,Solucao).
 
   
 
-depth_first_operadores( Caminho, Paragem, Destino,ListaOperadores, [(Destino,"Fim"), (Paragem,Carreira) | Caminho],Distancia):-
+depth_first_seleciona_operadores( Caminho, Paragem, Destino,ListaOperadores, [(Destino,"Fim"), (Paragem,Carreira) | Caminho],Distancia):-
         adjacencia(Paragem,Destino,Distancia,Carreira),
         paragem(Paragem,_,_,_,_,_,Operador,_,_,_),
         member(Operador,ListaOperadores).
 
 
-depth_first_operadores( Caminho, Paragem, End,ListaOperadores,Solucao,Distancia)  :-
+depth_first_seleciona_operadores( Caminho, Paragem, End,ListaOperadores,Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
     paragem(Paragem,_,_,_,_,_,Operador,_,_,_),
     member(Operador,ListaOperadores),
     write(ProxParagem),nl,
     \+ member( ProxParagem, Caminho),
-    depth_first_operadores( [(Paragem,Carreira) | Caminho], ProxParagem,End,ListaOperadores,Solucao,DistanciaAcumulada),
+    depth_first_seleciona_operadores([(Paragem,Carreira) | Caminho], ProxParagem,End,ListaOperadores,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
+
+
+
+%ex3 Não escolher certas paragens
+
+%183->182 : Vimeca
+
+resolve_df_exclui_operadores( Comeco, Destino,ListaOperadores ,Solucao,Distancia)  :-
+    depth_first_exclui_operadores( [], Comeco, Destino,ListaOperadores,SolucaoInvertida,Distancia),
+    reverse(SolucaoInvertida,Solucao).
+
+  
+
+depth_first_exclui_operadores( Caminho, Paragem, Destino,ListaOperadores, [(Destino,"Fim"), (Paragem,Carreira) | Caminho],Distancia):-
+        adjacencia(Paragem,Destino,Distancia,Carreira),
+        paragem(Paragem,_,_,_,_,_,Operador,_,_,_),
+        \+ member(Operador,ListaOperadores).
+
+
+depth_first_exclui_operadores( Caminho, Paragem, End,ListaOperadores,Solucao,Distancia)  :-
+    adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
+    paragem(Paragem,_,_,_,_,_,Operador,_,_,_),
+    \+ member(Operador,ListaOperadores),
+    write(ProxParagem),nl,
+    \+ member( ProxParagem, Caminho),
+    depth_first_exclui_operadores([(Paragem,Carreira) | Caminho], ProxParagem,End,ListaOperadores,Solucao,DistanciaAcumulada),
+    Distancia is DistanciaParagem + DistanciaAcumulada.
+
+
+
 
 
 

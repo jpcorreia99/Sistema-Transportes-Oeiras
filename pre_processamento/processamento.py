@@ -78,7 +78,7 @@ def processa_excel_adjacencia():
 
 
 def processa_exceis():
-    #processa_excel_adjacencia()
+    processa_excel_adjacencia()
     processa_excel_paragens()
 
 processa_exceis()
