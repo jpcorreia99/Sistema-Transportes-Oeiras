@@ -11,7 +11,7 @@ change_working_directory():-
 
 
 
-carregar_todos_ficheiros():-
+carrega_todos_ficheiros():-
     Lista_CSVs_Adjacencia = ["01.csv","02.csv","06.csv","07.csv",
                   "10.csv","11.csv","12.csv","13.csv",
                   "15.csv","23.csv","101.csv","102.csv",

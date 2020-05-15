@@ -4,7 +4,7 @@
 % 01: 183->182
 % 01-> 02: 78 -> 147
 
-           
+%ex 1           
 resolve_df( Comeco, Destino ,Solucao,Distancia)  :-
     depthfirst( [], Comeco, Destino,SolucaoInvertida,Distancia),
     reverse(SolucaoInvertida,Solucao).
@@ -22,6 +22,31 @@ depthfirst( Caminho, Paragem, End, Solucao,Distancia)  :-
     depthfirst( [(Paragem,Carreira) | Caminho], ProxParagem,End,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
   
+
+%ex2 Selecionar apenas algumas paragens
+
+%183->191 : Vimeca
+
+resolve_df_operadores( Comeco, Destino,ListaOperadores ,Solucao,Distancia)  :-
+    depth_first_operadores( [], Comeco, Destino,ListaOperadores,SolucaoInvertida,Distancia),
+    reverse(SolucaoInvertida,Solucao).
+
+  
+
+depth_first_operadores( Caminho, Paragem, Destino,ListaOperadores, [(Destino,"Fim"), (Paragem,Carreira) | Caminho],Distancia):-
+        adjacencia(Paragem,Destino,Distancia,Carreira),
+        paragem(Paragem,_,_,_,_,_,Operador,_,_,_),
+        member(Operador,ListaOperadores).
+
+
+depth_first_operadores( Caminho, Paragem, End,ListaOperadores,Solucao,Distancia)  :-
+    adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
+    paragem(Paragem,_,_,_,_,_,Operador,_,_,_),
+    member(Operador,ListaOperadores),
+    write(ProxParagem),nl,
+    \+ member( ProxParagem, Caminho),
+    depth_first_operadores( [(Paragem,Carreira) | Caminho], ProxParagem,End,ListaOperadores,Solucao,DistanciaAcumulada),
+    Distancia is DistanciaParagem + DistanciaAcumulada.
 
 
 
