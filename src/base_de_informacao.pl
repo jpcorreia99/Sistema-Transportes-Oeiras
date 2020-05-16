@@ -1,5 +1,6 @@
 use_module(library(csv)).
 
+
 %NOTA: APAGAR ÚLTIMA LINHA DO CSV 01
 
 :- dynamic adjacencia/4.
@@ -70,3 +71,5 @@ estima(Nodo1,Nodo2,Estimativa):-
     paragem(Nodo1,Latitude1,Longitude1,_,_,_,_,_,_,_),
     paragem(Nodo2,Latitude2,Longitude2,_,_,_,_,_,_,_),
     distancia_euclidiana(Latitude1,Latitude2,Longitude1,Longitude2,Estimativa).
+
+

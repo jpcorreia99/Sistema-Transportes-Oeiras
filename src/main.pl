@@ -77,10 +77,28 @@ depth_first_exclui_operadores( Caminho, Paragem, End,ListaOperadores,Solucao,Dis
 
 
 
+%ex 4
 
 
 
-dfTodasSolucoes(L,Start,End):- findall((S),(resolve_df(Start,End,S,_)),L).
+identifica_maior_carreiras(Comeco, Destino,Solucao,Distancia,ListaOrdenadaPorNumeroDeCarreiras):-
+    depthfirst( [], Comeco, Destino,SolucaoInvertida,Distancia),
+    reverse(SolucaoInvertida,Solucao),
+    maplist(converte_tuplo_para_n_carreiras, Solucao,ListaASerOrdenada),
+    sort(2,  @>=, ListaASerOrdenada,  ListaOrdenadaPorNumeroDeCarreiras).
+    
+    
+
+%em vez de usar o csv das paragens é melhor contar a quantas outras paragens uma paragem está diretamente ligada
+quantas_carreiras(GID,NumeroCarreiras):- findall((GID),(adjacencia(GID,_,_,_)),L),
+                            length(L,NumeroCarreiras).
+
+
+converte_tuplo_para_n_carreiras((GID,_),(GID,NCarreiras)):-
+    quantas_carreiras(GID,NCarreiras).
+
+                        
+
 
 
 
