@@ -99,6 +99,28 @@ converte_tuplo_para_n_carreiras((GID,_),(GID,NCarreiras)):-
 
 
 
+%ex 7
+
+caminho_com_publicidade(Comeco,Destino,Solucao,Distancia):-
+    depth_first_publicidade( [], Comeco, Destino,SolucaoInvertida,Distancia),
+    reverse(SolucaoInvertida,Solucao).
+
+
+depth_first_publicidade( Caminho, Paragem, Destino, [(Destino,"Fim"), (Paragem,Carreira) | Caminho],Distancia):-
+    adjacencia(Paragem,Destino,Distancia,Carreira).
+
+
+depth_first_publicidade( Caminho, Paragem, End, Solucao,Distancia)  :-
+    adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
+    paragem(ProxParagem,_,_,_,_,Statis,_,_,_,_),
+    write(Statis),
+    paragem(ProxParagem,_,_,_,_,'Yes',_,_,_,_),
+    write(ProxParagem),nl,
+    \+ member( ProxParagem, Caminho),
+    depth_first_publicidade( [(Paragem,Carreira) | Caminho], ProxParagem,End,Solucao,DistanciaAcumulada),
+    Distancia is DistanciaParagem + DistanciaAcumulada.
+  
+
 
 
 %goal(182).
