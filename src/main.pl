@@ -163,6 +163,9 @@ paragem(499,-103758.44,-94393.36,'Bom','Fechado dos Lados','Yes','Vimeca',286,'R
 
 %goal(499).
 
+% hipóteses
+% apenas inserir adjacencia(X,Y,Custo)
+% dar assert das estimativas de todos os novos ao nodo e depois remove para poupar chamadas na altura de avalair
 
 resolve_aestrela(Nodo, Destino,Caminho/Custo) :-
 	estima(Nodo, Destino,Estima),
