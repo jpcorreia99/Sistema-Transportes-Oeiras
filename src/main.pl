@@ -4,6 +4,8 @@
 % 01: 183->182
 % 01-> 02: 78 -> 147
 
+% METER CARREIRAS NOS DOIS SENTIDOS
+
 %ex 1           
 resolve_df( Comeco, Destino ,Solucao,Distancia)  :-
     depthfirst( [], Comeco, Destino,SolucaoInvertida,Distancia),
@@ -15,11 +17,11 @@ depthfirst( Caminho, Paragem, Destino, [(Destino,"Fim"), (Paragem,Carreira) | Ca
         adjacencia(Paragem,Destino,Distancia,Carreira).
 
 
-depthfirst( Caminho, Paragem, End, Solucao,Distancia)  :-
+depthfirst( Caminho, Paragem, Destino, Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
     write(ProxParagem),nl,
     \+ member( ProxParagem, Caminho),
-    depthfirst( [(Paragem,Carreira) | Caminho], ProxParagem,End,Solucao,DistanciaAcumulada),
+    depthfirst( [(Paragem,Carreira) | Caminho], ProxParagem,Destino,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
   
 
@@ -121,6 +123,24 @@ depth_first_publicidade( Caminho, Paragem, End, Solucao,Distancia)  :-
     Distancia is DistanciaParagem + DistanciaAcumulada.
   
 
+
+%ex 8 
+caminho_com_abrigos(Comeco,Destino,Solucao,Distancia):-
+    depth_first_abrigos( [], Comeco, Destino,SolucaoInvertida,Distancia),
+    reverse(SolucaoInvertida,Solucao).
+
+
+depth_first_abrigos( Caminho, Paragem, Destino, [(Destino,"Fim"), (Paragem,Carreira) | Caminho],Distancia):-
+    adjacencia(Paragem,Destino,Distancia,Carreira).
+
+
+depth_first_abrigos( Caminho, Paragem, Destino, Solucao,Distancia)  :-
+    adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
+    paragem(ProxParagem,_,_,_,'Fechado dos Lados',_,_,_,_,_),
+    write(ProxParagem),nl,
+    \+ member( ProxParagem, Caminho),
+    depth_first_abrigos( [(Paragem,Carreira) | Caminho], ProxParagem,Destino,Solucao,DistanciaAcumulada),
+    Distancia is DistanciaParagem + DistanciaAcumulada.
 
 
 %goal(182).
