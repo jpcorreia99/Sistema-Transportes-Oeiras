@@ -1,5 +1,5 @@
 :-include("base_de_informacao.pl").
-
+:-include("predicados_auxiliares").
 
 % 01: 183->182
 % 01-> 02: 78 -> 147
@@ -7,11 +7,11 @@
 % METER CARREIRAS NOS DOIS SENTIDOS
 
 %ex 1           
-resolve_df( Comeco, Destino ,Solucao,Distancia)  :-
+resolve_df( Comeco, Destino ,Solucao,Distancia,Tempo)  :-
     depthfirst( [], Comeco, Destino,SolucaoInvertida,Distancia),
-    reverse(SolucaoInvertida,Solucao).
+    reverse(SolucaoInvertida,Solucao),
+    distancia_para_tempo(Distancia,Tempo).
 
-  
 
 depthfirst( Caminho, Paragem, Destino, [(Destino,"Fim"), (Paragem,Carreira) | Caminho],Distancia):-
         adjacencia(Paragem,Destino,Distancia,Carreira).
@@ -29,9 +29,10 @@ depthfirst( Caminho, Paragem, Destino, Solucao,Distancia)  :-
 
 %183->182 : Vimeca
 
-resolve_df_seleciona_operadores( Comeco, Destino,ListaOperadores ,Solucao,Distancia)  :-
+resolve_df_seleciona_operadores( Comeco, Destino,ListaOperadores ,Solucao,Distancia,Tempo)  :-
     depth_first_seleciona_operadores( [], Comeco, Destino,ListaOperadores,SolucaoInvertida,Distancia),
-    reverse(SolucaoInvertida,Solucao).
+    reverse(SolucaoInvertida,Solucao),
+    distancia_para_tempo(Distancia,Tempo).
 
   
 
@@ -56,9 +57,10 @@ depth_first_seleciona_operadores( Caminho, Paragem, End,ListaOperadores,Solucao,
 
 %183->182 : Vimeca
 
-resolve_df_exclui_operadores( Comeco, Destino,ListaOperadores ,Solucao,Distancia)  :-
+resolve_df_exclui_operadores( Comeco, Destino,ListaOperadores ,Solucao,Distancia,Tempo)  :-
     depth_first_exclui_operadores( [], Comeco, Destino,ListaOperadores,SolucaoInvertida,Distancia),
-    reverse(SolucaoInvertida,Solucao).
+    reverse(SolucaoInvertida,Solucao),
+    distancia_para_tempo(Distancia,Tempo).
 
   
 
@@ -80,11 +82,12 @@ depth_first_exclui_operadores( Caminho, Paragem, End,ListaOperadores,Solucao,Dis
 
 
 %ex 4
-identifica_maior_carreiras(Comeco, Destino,Solucao,Distancia,ListaOrdenadaPorNumeroDeCarreiras):-
+identifica_maior_carreiras(Comeco, Destino,Solucao,Distancia,ListaOrdenadaPorNumeroDeCarreiras,Tempo):-
     depthfirst( [], Comeco, Destino,SolucaoInvertida,Distancia),
     reverse(SolucaoInvertida,Solucao),
     maplist(converte_tuplo_para_n_carreiras, Solucao,ListaASerOrdenada),
-    sort(2,  @>=, ListaASerOrdenada,  ListaOrdenadaPorNumeroDeCarreiras).
+    sort(2,  @>=, ListaASerOrdenada,  ListaOrdenadaPorNumeroDeCarreiras),
+    distancia_para_tempo(Distancia,Tempo).
     
     
 
@@ -103,9 +106,10 @@ converte_tuplo_para_n_carreiras((GID,_),(GID,NCarreiras)):-
 
 %ex 7
 
-caminho_com_publicidade(Comeco,Destino,Solucao,Distancia):-
+caminho_com_publicidade(Comeco,Destino,Solucao,Distancia,Tempo):-
     depth_first_publicidade( [], Comeco, Destino,SolucaoInvertida,Distancia),
-    reverse(SolucaoInvertida,Solucao).
+    reverse(SolucaoInvertida,Solucao),
+    distancia_para_tempo(Distancia,Tempo).
 
 
 depth_first_publicidade( Caminho, Paragem, Destino, [(Destino,"Fim"), (Paragem,Carreira) | Caminho],Distancia):-
@@ -114,8 +118,6 @@ depth_first_publicidade( Caminho, Paragem, Destino, [(Destino,"Fim"), (Paragem,C
 
 depth_first_publicidade( Caminho, Paragem, End, Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
-    paragem(ProxParagem,_,_,_,_,Statis,_,_,_,_),
-    write(Statis),
     paragem(ProxParagem,_,_,_,_,'Yes',_,_,_,_),
     write(ProxParagem),nl,
     \+ member( ProxParagem, Caminho),
@@ -125,9 +127,10 @@ depth_first_publicidade( Caminho, Paragem, End, Solucao,Distancia)  :-
 
 
 %ex 8 
-caminho_com_abrigos(Comeco,Destino,Solucao,Distancia):-
+caminho_com_abrigos(Comeco,Destino,Solucao,Distancia,Tempo):-
     depth_first_abrigos( [], Comeco, Destino,SolucaoInvertida,Distancia),
-    reverse(SolucaoInvertida,Solucao).
+    reverse(SolucaoInvertida,Solucao),
+    distancia_para_tempo(Distancia,Tempo).
 
 
 depth_first_abrigos( Caminho, Paragem, Destino, [(Destino,"Fim"), (Paragem,Carreira) | Caminho],Distancia):-
@@ -136,11 +139,28 @@ depth_first_abrigos( Caminho, Paragem, Destino, [(Destino,"Fim"), (Paragem,Carre
 
 depth_first_abrigos( Caminho, Paragem, Destino, Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
-    paragem(ProxParagem,_,_,_,'Fechado dos Lados',_,_,_,_,_),
+    paragem(ProxParagem,_,_,_,TipoAbrigo,_,_,_,_,_),
+    member(TipoAbrigo,['Aberto dos Lados','Fechado dos Lados']),
     write(ProxParagem),nl,
     \+ member( ProxParagem, Caminho),
     depth_first_abrigos( [(Paragem,Carreira) | Caminho], ProxParagem,Destino,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
+
+
+%ex 9
+contem_paragens([Paragem|T],Caminho):-
+    member((Paragem,_),Caminho),
+    contem_paragens(T,Caminho).
+
+contem_paragens([],_).
+
+caminho_com_paragens(Comeco,Destino,Paragens,Solucao,Distancia,Tempo):-
+    depthfirst( [], Comeco, Destino,SolucaoInvertida,Distancia),
+    contem_paragens(Paragens,SolucaoInvertida),
+    reverse(SolucaoInvertida,Solucao),
+    distancia_para_tempo(Distancia,Tempo).
+
+
 
 
 %goal(182).
