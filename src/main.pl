@@ -4,8 +4,9 @@
 % 01: 183->182
 % 01-> 02: 78 -> 147
 
-% METER CARREIRAS NOS DOIS SENTIDOS
 
+% METER CARREIRAS NOS DOIS SENTIDOS
+%Nota: os algoritmos de usar abrigado e com publicidade ignoram
 %ex 1           
 resolve_df( Comeco, Destino ,Solucao,Distancia,Tempo)  :-
     depthfirst( [], Comeco, Destino,SolucaoInvertida,Distancia),
@@ -106,7 +107,7 @@ converte_tuplo_para_n_carreiras((GID,_),(GID,NCarreiras)):-
 
 %ex 7
 
-caminho_com_publicidade(Comeco,Destino,Solucao,Distancia,Tempo):-
+resolve_df_com_publicidade(Comeco,Destino,Solucao,Distancia,Tempo):-
     depth_first_publicidade( [], Comeco, Destino,SolucaoInvertida,Distancia),
     reverse(SolucaoInvertida,Solucao),
     distancia_para_tempo(Distancia,Tempo).
@@ -127,7 +128,7 @@ depth_first_publicidade( Caminho, Paragem, End, Solucao,Distancia)  :-
 
 
 %ex 8 
-caminho_com_abrigos(Comeco,Destino,Solucao,Distancia,Tempo):-
+resolve_df_abrigos(Comeco,Destino,Solucao,Distancia,Tempo):-
     depth_first_abrigos( [], Comeco, Destino,SolucaoInvertida,Distancia),
     reverse(SolucaoInvertida,Solucao),
     distancia_para_tempo(Distancia,Tempo).
@@ -154,7 +155,7 @@ contem_paragens([Paragem|T],Caminho):-
 
 contem_paragens([],_).
 
-caminho_com_paragens(Comeco,Destino,Paragens,Solucao,Distancia,Tempo):-
+resolve_df_com_paragens(Comeco,Destino,Paragens,Solucao,Distancia,Tempo):-
     depthfirst( [], Comeco, Destino,SolucaoInvertida,Distancia),
     contem_paragens(Paragens,SolucaoInvertida),
     reverse(SolucaoInvertida,Solucao),
@@ -277,9 +278,8 @@ caminho_novo(Comeco,Destino,Caminho,Distancia,Tempo):-
 %constroi o caminho a partir do fim
 %caso base em que já chegou ao inicio
 caminho_novo_aux(Comeco,AcumuladorDistancia,[(Comeco,Carreira),(NodoAtual,CarreiraAtual)|T],
-                [(Comeco,Carreira),(NodoAtual,CarreiraAtual)|T],Distancia):-
-    adjacencia(Comeco,NodoAtual,DistanciaParagem,Carreira),
-    Distancia is AcumuladorDistancia + DistanciaParagem.
+                [(Comeco,Carreira),(NodoAtual,CarreiraAtual)|T],AcumuladorDistancia):-
+    adjacencia(Comeco,NodoAtual,_,Carreira).
 
 caminho_novo_aux(Comeco,AccDistancia,[(ParagemAtual,CarreiraAtual)|T],P,Distancia) :-
     adjacencia(ParagemPrevia,ParagemAtual,DistanciaParagem,Carreira), 
@@ -297,11 +297,10 @@ caminho_operadores(Comeco,Destino,ListaOperadores,Caminho,Distancia,Tempo):-
 
 
 caminho_operadores_aux(Comeco,AcumuladorDistancia,ListaOperadores,[(Comeco,Carreira),(NodoSeguinte,CarreiraSeguinte)|T],
-                [(Comeco,Carreira),(NodoSeguinte,CarreiraSeguinte)|T],Distancia):-
-    adjacencia(Comeco,NodoSeguinte,DistanciaParagem,Carreira),
+                [(Comeco,Carreira),(NodoSeguinte,CarreiraSeguinte)|T],AcumuladorDistancia):-
+    adjacencia(Comeco,NodoSeguinte,_,Carreira),
     paragem(NodoSeguinte,_,_,_,_,_,Operador,_,_,_),
-    member(Operador,ListaOperadores),
-    Distancia is AcumuladorDistancia + DistanciaParagem.
+    member(Operador,ListaOperadores).
 
 caminho_operadores_aux(Comeco,AccDistancia,ListaOperadores,[(Y,CarreiraSucessor)|T],P,Distancia) :-
     adjacencia(ParagemPrevia,Y,DistanciaParagem,Carreira), 
@@ -321,11 +320,10 @@ caminho_exclui_operadores(Comeco,Destino,ListaOperadores,Caminho,Distancia,Tempo
 
 
 caminho_exclui_operadores_aux(Comeco,AcumuladorDistancia,ListaOperadores,[(Comeco,Carreira),(NodoSeguinte,CarreiraSeguinte)|T],
-                [(Comeco,Carreira),(NodoSeguinte,CarreiraSeguinte)|T],Distancia):-
-    adjacencia(Comeco,NodoSeguinte,DistanciaParagem,Carreira),
+                [(Comeco,Carreira),(NodoSeguinte,CarreiraSeguinte)|T],AcumuladorDistancia):-
+    adjacencia(Comeco,NodoSeguinte,_,Carreira),
     paragem(NodoSeguinte,_,_,_,_,_,Operador,_,_,_),
-    \+ member(Operador,ListaOperadores),
-    Distancia is AcumuladorDistancia + DistanciaParagem.
+    \+ member(Operador,ListaOperadores).
 
 caminho_exclui_operadores_aux(Comeco,AccDistancia,ListaOperadores,[(ParagemAtual,CarreiraAtual)|T],P,Distancia) :-
     adjacencia(ParagemPrevia,ParagemAtual,DistanciaParagem,Carreira), 
@@ -335,3 +333,54 @@ caminho_exclui_operadores_aux(Comeco,AccDistancia,ListaOperadores,[(ParagemAtual
     NovaDistancia is AccDistancia + DistanciaParagem,
     caminho_exclui_operadores_aux(Comeco,NovaDistancia,ListaOperadores,[(ParagemPrevia,Carreira),(ParagemAtual,CarreiraAtual)|T],P,Distancia).
 
+
+%ex4 
+caminho_maior_carreiras(Comeco, Destino,Caminho,Distancia,ListaOrdenadaPorNumeroDeCarreiras,Tempo):-
+    caminho_novo_aux(Comeco,0,[(Destino,"Fim")],Caminho,Distancia),
+    maplist(converte_tuplo_para_n_carreiras, Caminho,ListaASerOrdenada),
+    sort(2,  @>=, ListaASerOrdenada,  ListaOrdenadaPorNumeroDeCarreiras),
+    distancia_para_tempo(Distancia,Tempo).
+
+%ex 7
+caminho_com_publicidade(Comeco,Destino,Caminho,Distancia,Tempo):-
+    caminho_com_publicidade_aux(Comeco,0,[(Destino,"Fim")],Caminho,Distancia),
+    distancia_para_tempo(Distancia,Tempo).
+
+%constroi o caminho a partir do fim
+%caso base em que já chegou ao inicio
+caminho_com_publicidade_aux(Comeco,AcumuladorDistancia,[(Comeco,Carreira),(NodoAtual,CarreiraAtual)|T],
+                [(Comeco,Carreira),(NodoAtual,CarreiraAtual)|T],AcumuladorDistancia):-
+    adjacencia(Comeco,NodoAtual,_,Carreira).
+
+caminho_com_publicidade_aux(Comeco,AccDistancia,[(ParagemAtual,CarreiraAtual)|T],P,Distancia) :-
+    adjacencia(ParagemPrevia,ParagemAtual,DistanciaParagem,Carreira), 
+    write(ParagemPrevia),write(" "),write(DistanciaParagem),nl,
+    paragem(ParagemPrevia,_,_,_,_,'Yes',_,_,_,_),
+    \+ member((ParagemPrevia,_),[(ParagemAtual,CarreiraAtual)|T]), 
+    NovaDistancia is AccDistancia + DistanciaParagem,
+    caminho_com_publicidade_aux(Comeco,NovaDistancia,[(ParagemPrevia,Carreira),(ParagemAtual,CarreiraAtual)|T],P,Distancia).
+
+%ex 8 
+caminho_com_abrigos(Comeco,Destino,Caminho,Distancia,Tempo):-
+    caminho_com_publicidade_aux(Comeco,0,[(Destino,"Fim")],Caminho,Distancia),
+    distancia_para_tempo(Distancia,Tempo).
+
+%constroi o caminho a partir do fim
+%caso base em que já chegou ao inicio
+caminho_com_abrigos_aux(Comeco,AcumuladorDistancia,[(Comeco,Carreira),(NodoAtual,CarreiraAtual)|T],
+                [(Comeco,Carreira),(NodoAtual,CarreiraAtual)|T],AcumuladorDistancia):-
+    adjacencia(Comeco,NodoAtual,_,Carreira).
+
+caminho_com_abrigos_aux(Comeco,AccDistancia,[(ParagemAtual,CarreiraAtual)|T],P,Distancia) :-
+    adjacencia(ParagemPrevia,ParagemAtual,DistanciaParagem,Carreira), 
+    paragem(ParagemPrevia,_,_,_,TipoAbrigo,_,_,_,_,_),
+    member(TipoAbrigo,['Aberto dos Lados','Fechado dos Lados']),
+    \+ member((ParagemPrevia,_),[(ParagemAtual,CarreiraAtual)|T]), 
+    NovaDistancia is AccDistancia + DistanciaParagem,
+    caminho_com_abrigos_aux(Comeco,NovaDistancia,[(ParagemPrevia,Carreira),(ParagemAtual,CarreiraAtual)|T],P,Distancia).
+
+%ex9
+caminho_com_paragens(Comeco,Destino,Paragens,Caminho,Distancia,Tempo):-
+    caminho_novo_aux(Comeco,0,[(Destino,"Fim")],Caminho,Distancia),
+    contem_paragens(Paragens,Caminho),
+    distancia_para_tempo(Distancia,Tempo).
