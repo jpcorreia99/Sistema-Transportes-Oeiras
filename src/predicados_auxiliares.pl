@@ -2,8 +2,8 @@ hora_do_dia(Hora,DiaDaSemana) :-
     get_time(TimeStamp),
     stamp_date_time(TimeStamp, DateTime, local),
     date_time_value(hour, DateTime, Hora),
-    date_time_value(date, DateTime, Data),
-    day_of_the_week(Data, DiaDaSemana).
+    date_time_value(date, DateTime, Data).
+
     
 
 % Data uma hora do dia, devolve a velocidade média dos transportes públicos a esssa hora
@@ -39,7 +39,7 @@ velocidade_media(Hora,DiaDaSemana,45000):- %45
    % VelocidadeMedia is 45000.
 
 
-%calcula quanto tempo demora a percorrer a dada distância
+%calcula quanto tempo demora a percorrer a dada distância + tempo de espera de 5 em 5 minutos
 distancia_para_tempo(Distancia,(Horas,Minutos)):-
     hora_do_dia(Hora,DiaDaSemana),
     velocidade_media(Hora,DiaDaSemana,VelocidadeMedia),

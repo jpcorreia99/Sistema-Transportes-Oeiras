@@ -215,3 +215,19 @@ obtem_melhor_g2([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
 	
 obtem_melhor_g2([_|Caminhos], MelhorCaminho) :- 
 	obtem_melhor_g2(Caminhos, MelhorCaminho).
+
+
+%183,606
+/*caminho(Comeco,Destino,Caminho):-
+    caminhoAux(Comeco,[(Destino,"Fim")],Caminho).
+
+%constroi o caminho a partir do fim
+caminhoAux(Comeco,[(Comeco,Carreira),(Y,_)|T],[(Comeco,Carreira)|T]):-
+    adjacencia(Comeco,Y,_,Carreira). 
+
+caminhoAux(Comeco,[(Y,CarreiraSucessor)|T],P) :-
+    adjacencia(ParagemPrevia,Y,_,Carreira), 
+    write(ParagemPrevia),nl,
+    \+ member((ParagemPrevia,_),[(Y,CarreiraSucessor)|T]), 
+    caminhoAux(Comeco,[(ParagemPrevia,Carreira),(Y,CarreiraSucessor)|T],P).*/
+

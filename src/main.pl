@@ -20,7 +20,7 @@ depthfirst( Caminho, Paragem, Destino, [(Destino,"Fim"), (Paragem,Carreira) | Ca
 depthfirst( Caminho, Paragem, Destino, Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
     write(ProxParagem),nl,
-    \+ member( ProxParagem, Caminho),
+    \+ member( (ProxParagem,_), Caminho),
     depthfirst( [(Paragem,Carreira) | Caminho], ProxParagem,Destino,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
   
@@ -264,4 +264,74 @@ obtem_melhor([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
 obtem_melhor([_|Caminhos], MelhorCaminho) :- 
 	obtem_melhor(Caminhos, MelhorCaminho).
 
+
+
+
+
+%183,606
+%ex1
+caminho_novo(Comeco,Destino,Caminho,Distancia,Tempo):-
+    caminho_novo_aux(Comeco,0,[(Destino,"Fim")],Caminho,Distancia),
+    distancia_para_tempo(Distancia,Tempo).
+
+%constroi o caminho a partir do fim
+%caso base em que já chegou ao inicio
+caminho_novo_aux(Comeco,AcumuladorDistancia,[(Comeco,Carreira),(NodoAtual,CarreiraAtual)|T],
+                [(Comeco,Carreira),(NodoAtual,CarreiraAtual)|T],Distancia):-
+    adjacencia(Comeco,NodoAtual,DistanciaParagem,Carreira),
+    Distancia is AcumuladorDistancia + DistanciaParagem.
+
+caminho_novo_aux(Comeco,AccDistancia,[(ParagemAtual,CarreiraAtual)|T],P,Distancia) :-
+    adjacencia(ParagemPrevia,ParagemAtual,DistanciaParagem,Carreira), 
+    write(ParagemPrevia),write(" "),write(DistanciaParagem),nl,
+    \+ member((ParagemPrevia,_),[(ParagemAtual,CarreiraAtual)|T]), 
+    NovaDistancia is AccDistancia + DistanciaParagem,
+    caminho_novo_aux(Comeco,NovaDistancia,[(ParagemPrevia,Carreira),(ParagemAtual,CarreiraAtual)|T],P,Distancia).
+
+
+%ex2
+
+caminho_operadores(Comeco,Destino,ListaOperadores,Caminho,Distancia,Tempo):-
+    caminho_operadores_aux(Comeco,0,ListaOperadores,[(Destino,"Fim")],Caminho,Distancia),
+     distancia_para_tempo(Distancia,Tempo).
+
+
+caminho_operadores_aux(Comeco,AcumuladorDistancia,ListaOperadores,[(Comeco,Carreira),(NodoSeguinte,CarreiraSeguinte)|T],
+                [(Comeco,Carreira),(NodoSeguinte,CarreiraSeguinte)|T],Distancia):-
+    adjacencia(Comeco,NodoSeguinte,DistanciaParagem,Carreira),
+    paragem(NodoSeguinte,_,_,_,_,_,Operador,_,_,_),
+    member(Operador,ListaOperadores),
+    Distancia is AcumuladorDistancia + DistanciaParagem.
+
+caminho_operadores_aux(Comeco,AccDistancia,ListaOperadores,[(Y,CarreiraSucessor)|T],P,Distancia) :-
+    adjacencia(ParagemPrevia,Y,DistanciaParagem,Carreira), 
+    paragem(Y,_,_,_,_,_,Operador,_,_,_),
+    member(Operador,ListaOperadores),
+    write(ParagemPrevia),write(" "),write(DistanciaParagem),nl,
+    \+ member((ParagemPrevia,_),[(Y,CarreiraSucessor)|T]), 
+    NovaDistancia is AccDistancia + DistanciaParagem,
+    caminho_operadores_aux(Comeco,NovaDistancia,ListaOperadores,[(ParagemPrevia,Carreira),(Y,CarreiraSucessor)|T],P,Distancia).
+
+
+% ex3
+
+caminho_exclui_operadores(Comeco,Destino,ListaOperadores,Caminho,Distancia,Tempo):-
+    caminho_exclui_operadores_aux(Comeco,0,ListaOperadores,[(Destino,"Fim")],Caminho,Distancia),
+     distancia_para_tempo(Distancia,Tempo).
+
+
+caminho_exclui_operadores_aux(Comeco,AcumuladorDistancia,ListaOperadores,[(Comeco,Carreira),(NodoSeguinte,CarreiraSeguinte)|T],
+                [(Comeco,Carreira),(NodoSeguinte,CarreiraSeguinte)|T],Distancia):-
+    adjacencia(Comeco,NodoSeguinte,DistanciaParagem,Carreira),
+    paragem(NodoSeguinte,_,_,_,_,_,Operador,_,_,_),
+    \+ member(Operador,ListaOperadores),
+    Distancia is AcumuladorDistancia + DistanciaParagem.
+
+caminho_exclui_operadores_aux(Comeco,AccDistancia,ListaOperadores,[(ParagemAtual,CarreiraAtual)|T],P,Distancia) :-
+    adjacencia(ParagemPrevia,ParagemAtual,DistanciaParagem,Carreira), 
+    paragem(ParagemAtual,_,_,_,_,_,Operador,_,_,_),
+    \+ member(Operador,ListaOperadores),
+    \+ member((ParagemPrevia,_),[(ParagemAtual,CarreiraAtual)|T]), 
+    NovaDistancia is AccDistancia + DistanciaParagem,
+    caminho_exclui_operadores_aux(Comeco,NovaDistancia,ListaOperadores,[(ParagemPrevia,Carreira),(ParagemAtual,CarreiraAtual)|T],P,Distancia).
 
