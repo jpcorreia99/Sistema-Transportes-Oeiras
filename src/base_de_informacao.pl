@@ -7,6 +7,7 @@ use_module(library(csv)).
 :- dynamic paragem/10.
 :- dynamic adjacencia2/3.
 :- dynamic estimativa_pre_existente/3.
+:- dynamic estimativa_pre_existente2/2.
 
 
 change_working_directory():-
@@ -45,6 +46,7 @@ processa_adjacencias([fact(_,Gid,Latitude,Longitude,Carreira),
                         fact(Id2,Gid2,Latitude2,Longitude2,Carreira2)|T]):-
     distancia_euclidiana(Latitude,Latitude2,Longitude,Longitude2,Distancia),
     assert(adjacencia(Gid,Gid2,Distancia,Carreira)),
+    assert(adjacencia(Gid2,Gid,Distancia,Carreira)),
     write(Gid),
     write("->"),
     write(Gid2),
@@ -173,7 +175,7 @@ depthfirst2( Caminho, Paragem, End, Solucao,Distancia)  :-
     Distancia is DistanciaParagem + DistanciaAcumulada.
   
 
-
+/*
 
 resolve_gulosa2(Partida, Destino,Caminho/Custo) :-
 	estimativa_pre_existente(Partida,Destino ,Estimativa),
@@ -214,7 +216,7 @@ obtem_melhor_g2([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
 	obtem_melhor_g2([Caminho1/Custo1/Est1|Caminhos], MelhorCaminho).
 	
 obtem_melhor_g2([_|Caminhos], MelhorCaminho) :- 
-	obtem_melhor_g2(Caminhos, MelhorCaminho).
+	obtem_melhor_g2(Caminhos, MelhorCaminho).*/
 
 
 %183,606
@@ -231,3 +233,80 @@ caminhoAux(Comeco,[(Y,CarreiraSucessor)|T],P) :-
     \+ member((ParagemPrevia,_),[(Y,CarreiraSucessor)|T]), 
     caminhoAux(Comeco,[(ParagemPrevia,Carreira),(Y,CarreiraSucessor)|T],P).*/
 
+/*
+
+estima2(1,20).
+estima2(2,10).
+estima2(3,40).
+estima2(4,1).
+estima2(5,6).
+
+
+move(1,2,3).
+move(1,3,5).
+move(3,5,15).
+move(2,3,12).
+move(1,4,1).
+move(4,5,3).
+
+
+goal(5).*/
+
+goal(89).
+
+quantas_estimativas(R):-
+    findall((S),estimativa_pre_existente2(S,_),L),
+    length(L,R).
+
+assert_estimativa_previa2(Destino):-
+    findall((GId),paragem(GId,_,_,_,_,_,_,_,_,_),ListaParagens),
+    cria_estimativas2(ListaParagens,Destino).
+
+cria_estimativas2([Gid|T],Destino):-
+    paragem(Gid,Latitude1,Longitude1,_,_,_,_,_,_,_),
+    paragem(Destino,Latitude2,Longitude2,_,_,_,_,_,_,_),
+    distancia_euclidiana(Latitude1,Latitude2,Longitude1,Longitude2,Estimativa),
+    assert(estimativa_pre_existente2(Gid,Estimativa)),
+    cria_estimativas2(T,Destino).
+
+cria_estimativas2([],_).
+
+seleciona2(E, [E|Xs], Xs).
+seleciona2(E, [X|Xs], [X|Ys]) :- seleciona2(E, Xs, Ys).
+
+resolve_aestrela2(Nodo, Caminho/Custo) :-
+    estimativa_pre_existente2(Nodo, Estima),
+    aestrela2([[Nodo]/0/Estima], InvCaminho/Custo/_),
+    reverse(InvCaminho, Caminho).
+
+aestrela2(Caminhos, SolucaoCaminho) :-
+    obtem_melhor2(Caminhos, MelhorCaminho),
+    seleciona2(MelhorCaminho, Caminhos, OutrosCaminhos),
+    expande_aestrela2(MelhorCaminho, ExpCaminhos),
+    append(OutrosCaminhos, ExpCaminhos, NovoCaminhos),
+    aestrela2(NovoCaminhos, SolucaoCaminho).	
+
+
+expande_aestrela2(Caminho, ExpCaminhos) :-
+    findall(NovoCaminho, move_aestrela2(Caminho,NovoCaminho), ExpCaminhos).
+
+move_aestrela2([Nodo|Caminho]/Custo/_, [ProxNodo,Nodo|Caminho]/NovoCusto/Est) :-
+    adjacencia2(Nodo, ProxNodo, PassoCusto),\+ member(ProxNodo, Caminho),
+    NovoCusto is Custo + PassoCusto,
+    estimativa_pre_existente2(ProxNodo, Est).	
+    
+
+obtem_melhor2([Caminho], Caminho) :- !.
+
+obtem_melhor2([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
+    Custo1 + Est1 =< Custo2 + Est2, !, % custo 1 é a soma dos caminhos até aí
+    obtem_melhor2([Caminho1/Custo1/Est1|Caminhos], MelhorCaminho).
+    
+obtem_melhor2([_|Caminhos], MelhorCaminho) :- 
+    obtem_melhor2(Caminhos, MelhorCaminho).
+
+
+aestrela2(Caminhos, Caminho) :-
+    obtem_melhor2(Caminhos, Caminho),
+    Caminho = [Nodo|_]/_/_,goal(Nodo).
+    
