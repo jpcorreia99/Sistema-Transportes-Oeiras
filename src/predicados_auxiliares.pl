@@ -39,7 +39,7 @@ velocidade_media(Hora,DiaDaSemana,45000):- %45
    % VelocidadeMedia is 45000.
 
 
-%calcula quanto tempo demora a percorrer a dada distância + tempo de espera de 5 em 5 minutos
+%calcula quanto tempo demora a percorrer a dada distância
 distancia_para_tempo(Distancia,(Horas,Minutos)):-
     hora_do_dia(Hora,DiaDaSemana),
     velocidade_media(Hora,DiaDaSemana,VelocidadeMedia),
