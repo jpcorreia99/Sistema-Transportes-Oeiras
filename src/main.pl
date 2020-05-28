@@ -20,7 +20,6 @@ depthfirst( Caminho, Paragem, Destino, [(Destino,"Fim"), (Paragem,Carreira) | Ca
 
 depthfirst( Caminho, Paragem, Destino, Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
-    write(ProxParagem),nl,
     \+ member( (ProxParagem,_), Caminho),
     depthfirst( [(Paragem,Carreira) | Caminho], ProxParagem,Destino,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
@@ -46,8 +45,8 @@ depth_first_seleciona_operadores( Caminho, Paragem, Destino,ListaOperadores, [(D
 depth_first_seleciona_operadores( Caminho, Paragem, End,ListaOperadores,Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
     paragem(Paragem,_,_,_,_,_,Operador,_,_,_),
-    member(Operador,ListaOperadores),
     write(ProxParagem),nl,
+    member(Operador,ListaOperadores),
     \+ member( ProxParagem, Caminho),
     depth_first_seleciona_operadores([(Paragem,Carreira) | Caminho], ProxParagem,End,ListaOperadores,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
@@ -75,7 +74,6 @@ depth_first_exclui_operadores( Caminho, Paragem, End,ListaOperadores,Solucao,Dis
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
     paragem(Paragem,_,_,_,_,_,Operador,_,_,_),
     \+ member(Operador,ListaOperadores),
-    write(ProxParagem),nl,
     \+ member( ProxParagem, Caminho),
     depth_first_exclui_operadores([(Paragem,Carreira) | Caminho], ProxParagem,End,ListaOperadores,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
@@ -100,9 +98,132 @@ quantas_carreiras(GID,NumeroCarreiras):- findall((GID),(adjacencia(GID,_,_,_)),L
 converte_tuplo_para_n_carreiras((GID,_),(GID,NCarreiras)):-
     quantas_carreiras(GID,NCarreiras).
 
-                        
+
+% ex5 
+% DF 
+
+menor_caminho_distancia(Comeco, Destino,MenorCaminho,Distancia,Tempo):-
+    findall((Solucao,Distancia),resolve_df2(Comeco,Destino,Solucao,Distancia),L),
+    sort(2,  @<, L,  ListaOrdenadaPorDistancia),
+    nth0(0,ListaOrdenadaPorDistancia,(MenorCaminho,Distancia)),
+    distancia_para_tempo(Distancia,Tempo).
 
 
+resolve_df2( Comeco, Destino ,Solucao,Distancia)  :-
+    depthfirst2( [], Comeco, Destino,SolucaoInvertida,Distancia),
+    reverse(SolucaoInvertida,Solucao).
+
+depthfirst2( Caminho, Paragem, Destino, [Destino, Paragem | Caminho],Distancia):-
+    adjacencia2(Paragem,Destino,Distancia).
+
+
+depthfirst2( Caminho, Paragem, End, Solucao,Distancia)  :-
+    adjacencia2( Paragem, ProxParagem,DistanciaParagem),
+    write(ProxParagem),nl,
+    \+ member( ProxParagem, Caminho),
+    depthfirst2( [Paragem | Caminho], ProxParagem,End,Solucao,DistanciaAcumulada),
+    Distancia is DistanciaParagem + DistanciaAcumulada.
+
+
+
+% A*
+seleciona2(E, [E|Xs], Xs).
+seleciona2(E, [X|Xs], [X|Ys]) :- seleciona2(E, Xs, Ys).
+
+resolve_aestrela(Nodo, Destino, Caminho,Custo,Tempo) :-
+    estima(Nodo,Destino,Estima),
+    aestrela2([[Nodo]/0/Estima], Destino,InvCaminho/Custo/_),
+    reverse(InvCaminho, Caminho),    
+    distancia_para_tempo(Custo,Tempo).
+
+aestrela2(Caminhos,Destino, SolucaoCaminho) :-
+    obtem_melhor2(Caminhos, MelhorCaminho),
+    seleciona2(MelhorCaminho, Caminhos, OutrosCaminhos),
+    expande_aestrela2(MelhorCaminho, Destino,ExpCaminhos),
+    append(OutrosCaminhos, ExpCaminhos, NovoCaminhos),
+    aestrela2(NovoCaminhos, Destino,SolucaoCaminho).	
+
+
+aestrela2(Caminhos,Destino, Caminho) :-
+    obtem_melhor2(Caminhos, Caminho),
+    Caminho = [Nodo|_]/_/_,
+    Nodo==Destino.
+
+expande_aestrela2(Caminho,Destino, ExpCaminhos) :-
+    findall(NovoCaminho, move_aestrela2(Caminho,Destino,NovoCaminho), ExpCaminhos).
+
+move_aestrela2([Nodo|Caminho]/Custo/_, Destino,[ProxNodo,Nodo|Caminho]/NovoCusto/Est) :-
+    adjacencia2(Nodo, ProxNodo, PassoCusto),\+ member(ProxNodo, Caminho),
+    NovoCusto is Custo + PassoCusto,
+    estima(ProxNodo,Destino,Est).	
+    
+
+obtem_melhor2([Caminho], Caminho) :- !.
+
+obtem_melhor2([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
+    Custo1 + Est1 > Custo2 + Est2, !, % custo 1 é a soma dos caminhos até aí
+    obtem_melhor2([Caminho1/Custo1/Est1|Caminhos], MelhorCaminho).
+    
+obtem_melhor2([_|Caminhos], MelhorCaminho) :- 
+    obtem_melhor2(Caminhos, MelhorCaminho).
+
+
+
+% Greedy search
+
+resolve_gulosa(Partida, Destino,Caminho,Custo,Tempo) :-
+	estima(Partida,Destino ,Estimativa),
+	agulosa([[Partida]/0/Estimativa],Destino,InvCaminho/Custo/_),
+    reverse(InvCaminho, Caminho),
+    distancia_para_tempo(Custo,Tempo).
+
+agulosa(Caminhos, Destino ,Caminho) :-
+	obtem_melhor_g(Caminhos, Caminho),
+    Caminho = [Nodo|_]/_/_
+    ,Nodo == Destino.
+
+agulosa(Caminhos, Destino ,SolucaoCaminho) :-
+	obtem_melhor_g(Caminhos,MelhorCaminho),
+	seleciona(MelhorCaminho, Caminhos, OutrosCaminhos),
+	expande_gulosa(MelhorCaminho, ExpCaminhos,Destino),
+	append(OutrosCaminhos, ExpCaminhos, NovoCaminhos),
+        agulosa(NovoCaminhos,Destino ,SolucaoCaminho).	
+
+
+expande_gulosa(Caminho, ExpCaminhos, Destino) :-
+    findall(NovoCaminho, adjacente(Caminho,NovoCaminho,Destino), ExpCaminhos).
+
+
+adjacente([Nodo|Caminho]/Custo/_, [ProxNodo,Nodo|Caminho]/NovoCusto/Est,Destino) :-
+    adjacencia2(Nodo, ProxNodo, PassoCusto),\+ member(ProxNodo, Caminho),
+    NovoCusto is Custo + PassoCusto,
+    estima(ProxNodo,Destino ,Est).
+
+
+seleciona(E, [E|Xs], Xs).
+seleciona(E, [X|Xs], [X|Ys]) :- seleciona(E, Xs, Ys).
+
+
+obtem_melhor_g([Caminho], Caminho) :- !.
+
+obtem_melhor_g([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
+	Est1 =< Est2, !,
+	obtem_melhor_g([Caminho1/Custo1/Est1|Caminhos], MelhorCaminho).
+	
+obtem_melhor_g([_|Caminhos], MelhorCaminho) :- 
+	obtem_melhor_g(Caminhos, MelhorCaminho).
+
+%ex 6
+
+menor_caminho_paragens(Comeco, Destino,MenorCaminho,DistanciaCaminho,Tempo,NumeroParagens):-
+    findall((Solucao,Distancia),resolve_df2(Comeco,Destino,Solucao,Distancia),L),
+    maplist(adiciona_numero_paragens,L,ListaComNumeroParagens),
+    sort(2,  @<, ListaComNumeroParagens,  ListaOrdenadaPorDistancia),
+    nth0(0,ListaOrdenadaPorDistancia,(MenorCaminho,DistanciaCaminho,NumeroParagens)),
+    distancia_para_tempo(DistanciaCaminho,Tempo).
+
+adiciona_numero_paragens((Caminho,Distancia),(Caminho,Distancia,NParagens)):-
+    length(Caminho,NParagens).
 
 
 %ex 7
@@ -120,7 +241,6 @@ depth_first_publicidade( Caminho, Paragem, Destino, [(Destino,"Fim"), (Paragem,C
 depth_first_publicidade( Caminho, Paragem, End, Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
     paragem(ProxParagem,_,_,_,_,'Yes',_,_,_,_),
-    write(ProxParagem),nl,
     \+ member( ProxParagem, Caminho),
     depth_first_publicidade( [(Paragem,Carreira) | Caminho], ProxParagem,End,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
@@ -142,7 +262,6 @@ depth_first_abrigos( Caminho, Paragem, Destino, Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
     paragem(ProxParagem,_,_,_,TipoAbrigo,_,_,_,_,_),
     member(TipoAbrigo,['Aberto dos Lados','Fechado dos Lados']),
-    write(ProxParagem),nl,
     \+ member( ProxParagem, Caminho),
     depth_first_abrigos( [(Paragem,Carreira) | Caminho], ProxParagem,Destino,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
@@ -166,46 +285,6 @@ resolve_df_com_paragens(Comeco,Destino,Paragens,Solucao,Distancia,Tempo):-
 
 %goal(182).
 
-resolve_gulosa(Partida, Destino,Caminho/Custo) :-
-	estima(Partida,Destino ,Estimativa),
-	agulosa([[Partida]/0/Estimativa],Destino,InvCaminho/Custo/_),
-	reverse(InvCaminho, Caminho).
-
-agulosa(Caminhos, Destino ,Caminho) :-
-	obtem_melhor_g(Caminhos, Caminho),
-    Caminho = [Nodo|_]/_/_
-    ,Nodo == Destino.
-
-agulosa(Caminhos, Destino ,SolucaoCaminho) :-
-	obtem_melhor_g(Caminhos,MelhorCaminho),
-	seleciona(MelhorCaminho, Caminhos, OutrosCaminhos),
-	expande_gulosa(MelhorCaminho, ExpCaminhos,Destino),
-	append(OutrosCaminhos, ExpCaminhos, NovoCaminhos),
-        agulosa(NovoCaminhos,Destino ,SolucaoCaminho).	
-
-
-expande_gulosa(Caminho, ExpCaminhos, Destino) :-
-    findall(NovoCaminho, adjacente(Caminho,NovoCaminho,Destino), ExpCaminhos).
-
-
-adjacente([Nodo|Caminho]/Custo/_, [ProxNodo,Nodo|Caminho]/NovoCusto/Est,Destino) :-
-    adjacencia(Nodo, ProxNodo, PassoCusto,_),\+ member(ProxNodo, Caminho),
-    NovoCusto is Custo + PassoCusto,
-    estima(ProxNodo,Destino ,Est).
-
-
-seleciona(E, [E|Xs], Xs).
-seleciona(E, [X|Xs], [X|Ys]) :- seleciona(E, Xs, Ys).
-
-
-obtem_melhor_g([Caminho], Caminho) :- !.
-
-obtem_melhor_g([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
-	Est1 =< Est2, !,
-	obtem_melhor_g([Caminho1/Custo1/Est1|Caminhos], MelhorCaminho).
-	
-obtem_melhor_g([_|Caminhos], MelhorCaminho) :- 
-	obtem_melhor_g(Caminhos, MelhorCaminho).
 
 
 
@@ -223,47 +302,6 @@ paragem(595,-103725.69,-95975.2,'Bom','Fechado dos Lados','Yes','Vimeca',286,'Ru
 paragem(182,-103746.76,-96396.66,'Bom','Fechado dos Lados','Yes','Vimeca',286,'Rua Aquilino Ribeiro','Carnaxide e Queijas').
 paragem(499,-103758.44,-94393.36,'Bom','Fechado dos Lados','Yes','Vimeca',286,'Rua Aquilino Ribeiro','Carnaxide e Queijas').*/
 
-
-%goal(499).
-
-% hipóteses
-% apenas inserir adjacencia(X,Y,Custo)
-% dar assert das estimativas de todos os novos ao nodo e depois remove para poupar chamadas na altura de avalair
-
-resolve_aestrela(Nodo, Destino,Caminho/Custo) :-
-	estima(Nodo, Destino,Estima),
-	aestrela([[Nodo]/0/Estima],Destino ,InvCaminho/Custo/_),
-	reverse(InvCaminho, Caminho).
-
-aestrela(Caminhos,Destino,SolucaoCaminho) :-
-	obtem_melhor(Caminhos, MelhorCaminho),
-	seleciona(MelhorCaminho, Caminhos, OutrosCaminhos),
-	expande_aestrela(MelhorCaminho,Destino,ExpCaminhos),
-	append(OutrosCaminhos, ExpCaminhos, NovoCaminhos),
-	aestrela(NovoCaminhos,Destino ,SolucaoCaminho).	
-
-aestrela(Caminhos,Destino ,Caminho) :-
-        obtem_melhor(Caminhos, Caminho),
-        Caminho = [Node|_]/_/_,
-        Node == Destino.
-
-expande_aestrela(Caminho,Destino ,ExpCaminhos) :-
-	findall(NovoCaminho, move_aestrela(Caminho,Destino,NovoCaminho), ExpCaminhos).
-
-move_aestrela([Nodo|Caminho]/Custo/_,Destino ,[ProxNodo,Nodo|Caminho]/NovoCusto/Est) :-
-	adjacencia(Nodo, ProxNodo, PassoCusto,_),\+ member(ProxNodo, Caminho),
-	NovoCusto is Custo + PassoCusto,
-	estima(ProxNodo,Destino ,Est).	
-	
-
-obtem_melhor([Caminho], Caminho) :- !.
-
-obtem_melhor([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
-	Custo1 + Est1 =< Custo2 + Est2, !, % custo 1 é a soma dos caminhos até aí
-	obtem_melhor([Caminho1/Custo1/Est1|Caminhos], MelhorCaminho).
-	
-obtem_melhor([_|Caminhos], MelhorCaminho) :- 
-	obtem_melhor(Caminhos, MelhorCaminho).
 
 
 
@@ -306,7 +344,6 @@ caminho_operadores_aux(Comeco,AccDistancia,ListaOperadores,[(Y,CarreiraSucessor)
     adjacencia(ParagemPrevia,Y,DistanciaParagem,Carreira), 
     paragem(Y,_,_,_,_,_,Operador,_,_,_),
     member(Operador,ListaOperadores),
-    write(ParagemPrevia),write(" "),write(DistanciaParagem),nl,
     \+ member((ParagemPrevia,_),[(Y,CarreiraSucessor)|T]), 
     NovaDistancia is AccDistancia + DistanciaParagem,
     caminho_operadores_aux(Comeco,NovaDistancia,ListaOperadores,[(ParagemPrevia,Carreira),(Y,CarreiraSucessor)|T],P,Distancia).
@@ -341,6 +378,7 @@ caminho_maior_carreiras(Comeco, Destino,Caminho,Distancia,ListaOrdenadaPorNumero
     sort(2,  @>=, ListaASerOrdenada,  ListaOrdenadaPorNumeroDeCarreiras),
     distancia_para_tempo(Distancia,Tempo).
 
+
 %ex 7
 caminho_com_publicidade(Comeco,Destino,Caminho,Distancia,Tempo):-
     caminho_com_publicidade_aux(Comeco,0,[(Destino,"Fim")],Caminho,Distancia),
@@ -354,7 +392,6 @@ caminho_com_publicidade_aux(Comeco,AcumuladorDistancia,[(Comeco,Carreira),(NodoA
 
 caminho_com_publicidade_aux(Comeco,AccDistancia,[(ParagemAtual,CarreiraAtual)|T],P,Distancia) :-
     adjacencia(ParagemPrevia,ParagemAtual,DistanciaParagem,Carreira), 
-    write(ParagemPrevia),write(" "),write(DistanciaParagem),nl,
     paragem(ParagemPrevia,_,_,_,_,'Yes',_,_,_,_),
     \+ member((ParagemPrevia,_),[(ParagemAtual,CarreiraAtual)|T]), 
     NovaDistancia is AccDistancia + DistanciaParagem,

@@ -2,7 +2,8 @@ hora_do_dia(Hora,DiaDaSemana) :-
     get_time(TimeStamp),
     stamp_date_time(TimeStamp, DateTime, local),
     date_time_value(hour, DateTime, Hora),
-    date_time_value(date, DateTime, Data).
+    date_time_value(date, DateTime, Data),
+    day_of_the_week(Data,DiaDaSemana).
 
     
 
