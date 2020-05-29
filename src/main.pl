@@ -99,30 +99,49 @@ converte_tuplo_para_n_carreiras((GID,_),(GID,NCarreiras)):-
     quantas_carreiras(GID,NCarreiras).
 
 
-% ex5 
+%ex 5
+
+menor_caminho_paragens(Comeco, Destino,MenorCaminho,DistanciaCaminho,Tempo,NumeroParagens):-
+    findall((Solucao,Distancia),resolve_df2(Comeco,Destino,Solucao,Distancia),L),
+    maplist(adiciona_numero_paragens,L,ListaComNumeroParagens),
+    sort(2,  @<, ListaComNumeroParagens,  ListaOrdenadaPorDistancia),
+    nth0(0,ListaOrdenadaPorDistancia,(MenorCaminho,DistanciaCaminho,NumeroParagens)),
+    distancia_para_tempo(DistanciaCaminho,Tempo).
+
+adiciona_numero_paragens((Caminho,Distancia),(Caminho,Distancia,NParagens)):-
+    length(Caminho,NParagens).
+
+
+% ex6
 % DF 
 
 menor_caminho_distancia(Comeco, Destino,MenorCaminho,Distancia,Tempo):-
+    statistics(runtime,[Start|_]),
     findall((Solucao,Distancia),resolve_df2(Comeco,Destino,Solucao,Distancia),L),
     sort(2,  @<, L,  ListaOrdenadaPorDistancia),
     nth0(0,ListaOrdenadaPorDistancia,(MenorCaminho,Distancia)),
-    distancia_para_tempo(Distancia,Tempo).
+    distancia_para_tempo(Distancia,Tempo),
+    statistics(runtime,[Stop|_]),
+    Runtime is Stop-Start,
+    write("Tempo: "),write(Runtime).
 
 
 resolve_df2( Comeco, Destino ,Solucao,Distancia)  :-
-    depthfirst2( [], Comeco, Destino,SolucaoInvertida,Distancia),
-    reverse(SolucaoInvertida,Solucao).
+    depthfirst2( [], Comeco, Destino,Solucao,Distancia).
+   % reverse(SolucaoInvertida,Solucao).
+
 
 depthfirst2( Caminho, Paragem, Destino, [Destino, Paragem | Caminho],Distancia):-
-    adjacencia2(Paragem,Destino,Distancia).
-
+    adjacencia2(Paragem,Destino,DistanciaParagem),
+    Distancia = DistanciaParagem.
 
 depthfirst2( Caminho, Paragem, End, Solucao,Distancia)  :-
     adjacencia2( Paragem, ProxParagem,DistanciaParagem),
-    write(ProxParagem),nl,
+    %write(ProxParagem),nl,
     \+ member( ProxParagem, Caminho),
     depthfirst2( [Paragem | Caminho], ProxParagem,End,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
+
 
 
 
@@ -131,10 +150,14 @@ seleciona2(E, [E|Xs], Xs).
 seleciona2(E, [X|Xs], [X|Ys]) :- seleciona2(E, Xs, Ys).
 
 resolve_aestrela(Nodo, Destino, Caminho,Custo,Tempo) :-
+    statistics(runtime,[Start|_]),
     estima(Nodo,Destino,Estima),
     aestrela2([[Nodo]/0/Estima], Destino,InvCaminho/Custo/_),
     reverse(InvCaminho, Caminho),    
-    distancia_para_tempo(Custo,Tempo).
+    distancia_para_tempo(Custo,Tempo),
+    statistics(runtime,[Stop|_]),
+    Runtime is Stop-Start,
+    write("Tempo: "),write(Runtime).
 
 aestrela2(Caminhos,Destino, SolucaoCaminho) :-
     obtem_melhor2(Caminhos, MelhorCaminho),
@@ -172,10 +195,14 @@ obtem_melhor2([_|Caminhos], MelhorCaminho) :-
 % Greedy search
 
 resolve_gulosa(Partida, Destino,Caminho,Custo,Tempo) :-
+    statistics(runtime,[Start|_]),
 	estima(Partida,Destino ,Estimativa),
 	agulosa([[Partida]/0/Estimativa],Destino,InvCaminho/Custo/_),
     reverse(InvCaminho, Caminho),
-    distancia_para_tempo(Custo,Tempo).
+    distancia_para_tempo(Custo,Tempo),
+    statistics(runtime,[Stop|_]),
+    Runtime is Stop-Start,
+    write("Tempo: "),write(Runtime).
 
 agulosa(Caminhos, Destino ,Caminho) :-
 	obtem_melhor_g(Caminhos, Caminho),
@@ -212,18 +239,6 @@ obtem_melhor_g([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
 	
 obtem_melhor_g([_|Caminhos], MelhorCaminho) :- 
 	obtem_melhor_g(Caminhos, MelhorCaminho).
-
-%ex 6
-
-menor_caminho_paragens(Comeco, Destino,MenorCaminho,DistanciaCaminho,Tempo,NumeroParagens):-
-    findall((Solucao,Distancia),resolve_df2(Comeco,Destino,Solucao,Distancia),L),
-    maplist(adiciona_numero_paragens,L,ListaComNumeroParagens),
-    sort(2,  @<, ListaComNumeroParagens,  ListaOrdenadaPorDistancia),
-    nth0(0,ListaOrdenadaPorDistancia,(MenorCaminho,DistanciaCaminho,NumeroParagens)),
-    distancia_para_tempo(DistanciaCaminho,Tempo).
-
-adiciona_numero_paragens((Caminho,Distancia),(Caminho,Distancia,NParagens)):-
-    length(Caminho,NParagens).
 
 
 %ex 7
@@ -282,6 +297,24 @@ resolve_df_com_paragens(Comeco,Destino,Paragens,Solucao,Distancia,Tempo):-
 
 
 
+
+% extra: Devolve a lista das frguesias por onde passa
+%183->487
+resolve_df_lista_ruas_e_freguesias(Comeco,Destino,Solucao,Distancia,Tempo,ListaRuas,ListaFreguesias):-
+    depthfirst( [], Comeco, Destino,SolucaoInvertida,Distancia),
+    reverse(SolucaoInvertida,Solucao),
+    distancia_para_tempo(Distancia,Tempo),
+    cria_lista_ruas_e__Freguesias(Solucao,ListaRuasComDuplicados,ListaFreguesiasComDuplicados),
+    sort(ListaFreguesiasComDuplicados,ListaFreguesias),
+    sort(ListaRuasComDuplicados,ListaRuas).
+
+
+
+cria_lista_ruas_e__Freguesias([(Paragem,_)|T],[Rua|T2],[Freguesia|T3]):-
+    paragem(Paragem,_,_,_,_,_,_,_,Rua,Freguesia),
+    cria_lista_ruas_e__Freguesias(T,T2,T3).
+
+cria_lista_ruas_e__Freguesias([],[],[]).
 
 %goal(182).
 

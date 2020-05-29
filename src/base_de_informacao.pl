@@ -44,6 +44,7 @@ carrega_csv_paragens():-
 
 processa_adjacencias([fact(_,Gid,Latitude,Longitude,Carreira),
                         fact(Id2,Gid2,Latitude2,Longitude2,Carreira2)|T]):-
+    not(existe(Gid,Gid2)),
     distancia_euclidiana(Latitude,Latitude2,Longitude,Longitude2,Distancia),
     assert(adjacencia(Gid,Gid2,Distancia,Carreira)),
     assert(adjacencia(Gid2,Gid,Distancia,Carreira)),
@@ -55,6 +56,10 @@ processa_adjacencias([fact(_,Gid,Latitude,Longitude,Carreira),
     write(Distancia),
     write("\n"),
     processa_adjacencias([fact(Id2,Gid2,Latitude2,Longitude2,Carreira2)|T]).
+
+%caso seja repetido
+processa_adjacencias([_,X|T]):-
+    processa_adjacencias([X|T]).
 
 processa_adjacencias([_]).
 
@@ -75,7 +80,7 @@ estima(Nodo1,Nodo2,Estimativa):-
 
 
 
-% experimentos científicos
+% carrega um número menor de ficheiros
 carrega_todos_ficheiros2():-
     Lista_CSVs_Adjacencia = ["01.csv","02.csv","06.csv","07.csv"],
     maplist(carrega_csv_adjacencias,Lista_CSVs_Adjacencia),
@@ -97,6 +102,7 @@ processa_adjacencias2([fact(_,Gid,Latitude,Longitude,_),
                         fact(Id2,Gid2,Latitude2,Longitude2,_)|T]):-
     not(existe(Gid,Gid2)),
     distancia_euclidiana(Latitude,Latitude2,Longitude,Longitude2,Distancia),
+    Gid \=Gid2,
     assert(adjacencia2(Gid,Gid2,Distancia)),
     write(Gid),
     write("->"),
@@ -127,6 +133,9 @@ conta2(R):-
 %507->509
 existe(X,Y):-
     adjacencia2(X,Y,_).
+
+existe(X,Y):-
+    adjacencia(X,Y,_,_).
 
 
 distancia_euclidiana(X1,X2,Y1,Y2, R):- R is sqrt((X2-X1)^2 + (Y2-Y1)^2).
