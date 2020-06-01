@@ -45,7 +45,6 @@ depth_first_seleciona_operadores( Caminho, Paragem, Destino,ListaOperadores, [(D
 depth_first_seleciona_operadores( Caminho, Paragem, End,ListaOperadores,Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
     paragem(Paragem,_,_,_,_,_,Operador,_,_,_),
-    write(ProxParagem),nl,
     member(Operador,ListaOperadores),
     \+ member( ProxParagem, Caminho),
     depth_first_seleciona_operadores([(Paragem,Carreira) | Caminho], ProxParagem,End,ListaOperadores,Solucao,DistanciaAcumulada),
@@ -137,7 +136,6 @@ depthfirst2( Caminho, Paragem, Destino, [Destino, Paragem | Caminho],Distancia):
 
 depthfirst2( Caminho, Paragem, End, Solucao,Distancia)  :-
     adjacencia2( Paragem, ProxParagem,DistanciaParagem),
-    %write(ProxParagem),nl,
     \+ member( ProxParagem, Caminho),
     depthfirst2( [Paragem | Caminho], ProxParagem,End,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
@@ -184,7 +182,7 @@ move_aestrela2([Nodo|Caminho]/Custo/_, Destino,[ProxNodo,Nodo|Caminho]/NovoCusto
 obtem_melhor2([Caminho], Caminho) :- !.
 
 obtem_melhor2([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
-    Custo1 + Est1 > Custo2 + Est2, !, % custo 1 é a soma dos caminhos até aí
+    Custo1 + Est1 >= Custo2 + Est2, !, % custo 1 é a soma dos caminhos até aí
     obtem_melhor2([Caminho1/Custo1/Est1|Caminhos], MelhorCaminho).
     
 obtem_melhor2([_|Caminhos], MelhorCaminho) :- 
@@ -233,7 +231,7 @@ seleciona(E, [X|Xs], [X|Ys]) :- seleciona(E, Xs, Ys).
 
 obtem_melhor_g([Caminho], Caminho) :- !.
 
-obtem_melhor_g([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
+obtem_melhor_g([Caminho1/Custo1/Est1,_/_/Est2|Caminhos], MelhorCaminho) :-
 	Est1 =< Est2, !,
 	obtem_melhor_g([Caminho1/Custo1/Est1|Caminhos], MelhorCaminho).
 	
@@ -354,7 +352,6 @@ caminho_novo_aux(Comeco,AcumuladorDistancia,[(Comeco,Carreira),(NodoAtual,Carrei
 
 caminho_novo_aux(Comeco,AccDistancia,[(ParagemAtual,CarreiraAtual)|T],P,Distancia) :-
     adjacencia(ParagemPrevia,ParagemAtual,DistanciaParagem,Carreira), 
-    write(ParagemPrevia),write(" "),write(DistanciaParagem),nl,
     \+ member((ParagemPrevia,_),[(ParagemAtual,CarreiraAtual)|T]), 
     NovaDistancia is AccDistancia + DistanciaParagem,
     caminho_novo_aux(Comeco,NovaDistancia,[(ParagemPrevia,Carreira),(ParagemAtual,CarreiraAtual)|T],P,Distancia).
@@ -454,3 +451,41 @@ caminho_com_paragens(Comeco,Destino,Paragens,Caminho,Distancia,Tempo):-
     caminho_novo_aux(Comeco,0,[(Destino,"Fim")],Caminho,Distancia),
     contem_paragens(Paragens,Caminho),
     distancia_para_tempo(Distancia,Tempo).
+
+
+%breadth_first
+
+
+breadth_first( Comeco, Destino, Caminho,Distancia,Tempo):- 
+    breadth_first_aux( Destino, [[Comeco]], Caminho),
+    calcula_distancia_caminho(Caminho,Distancia),
+    distancia_para_tempo(Distancia,Tempo).
+
+
+
+breadth_first_aux(Destino, [[Destino|Visitados]|_], Path):- 
+    Visitados = [Start|_], 
+    adjacencia2(Start,Destino,_),  
+    reverse([Destino|Visitados], Path).
+
+breadth_first_aux( Destino, [Visitados|Restantes], Path) :-                     % take one from front
+    Visitados = [Start|_],            
+    Start \== Destino,
+    findall( X,
+        ( adjacencia2(Start,X,_), \+ member(X, Visitados) ),
+        [T|Extendido]),
+    maplist( adiciona_queue(Visitados), [T|Extendido], VisitadosExtendido),      % make many
+    append( Restantes, VisitadosExtendido, QueueAtualizada),   % put them at the end
+    breadth_first_aux( Destino, QueueAtualizada, Path ).
+
+
+adiciona_queue( A, B, [B|A]).
+
+
+calcula_distancia_caminho([Gid1,Gid2|T],Distancia):-
+    adjacencia2(Gid1,Gid2,DistanciaLigacao),
+    calcula_distancia_caminho([Gid2|T],DistanciaAcumulada),
+    Distancia is DistanciaLigacao + DistanciaAcumulada.
+  
+calcula_distancia_caminho([_],0).
+calcula_distancia_caminho([],0).

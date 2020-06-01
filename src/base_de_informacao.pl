@@ -45,6 +45,7 @@ carrega_csv_paragens():-
 processa_adjacencias([fact(_,Gid,Latitude,Longitude,Carreira),
                         fact(Id2,Gid2,Latitude2,Longitude2,Carreira2)|T]):-
     not(existe(Gid,Gid2)),
+    Gid \= Gid2,
     distancia_euclidiana(Latitude,Latitude2,Longitude,Longitude2,Distancia),
     assert(adjacencia(Gid,Gid2,Distancia,Carreira)),
     assert(adjacencia(Gid2,Gid,Distancia,Carreira)),
@@ -82,7 +83,8 @@ estima(Nodo1,Nodo2,Estimativa):-
 
 % carrega um número menor de ficheiros
 carrega_todos_ficheiros2():-
-    Lista_CSVs_Adjacencia = ["01.csv","02.csv","06.csv","07.csv"],
+    %Lista_CSVs_Adjacencia = ["01.csv","02.csv","06.csv","07.csv"],
+    Lista_CSVs_Adjacencia = ["01.csv","02.csv"],
     maplist(carrega_csv_adjacencias,Lista_CSVs_Adjacencia),
     carrega_csv_paragens().
 
