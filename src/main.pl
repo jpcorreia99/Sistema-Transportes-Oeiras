@@ -4,11 +4,17 @@
 % 01: 183->182
 % 01-> 02: 78 -> 147
 
+% set_prolog_stack(global, limit(10 000 000 000)).
+/*caminho_depth_first(583,732,S,D,T).
+caminho_depth_first(583,178,S,D,T).
+caminho_depth_first(583,817,S,D,T).
+caminho_depth_first(583,1009,S,D,T). 
+caminho_depth_first(97,526,S,D,T). 
+caminho_depth_first(583,712,S,D,T).  // inverter para o bf
+caminho_depth_first(583,59,S,D,T).*/
 
-% METER CARREIRAS NOS DOIS SENTIDOS
-%Nota: os algoritmos de usar abrigado e com publicidade ignoram
 %ex 1           
-resolve_df( Comeco, Destino ,Solucao,Distancia,Tempo)  :-
+caminho_depth_first( Comeco, Destino ,Solucao,Distancia,Tempo)  :-
     depthfirst( [], Comeco, Destino,SolucaoInvertida,Distancia),
     reverse(SolucaoInvertida,Solucao),
     distancia_para_tempo(Distancia,Tempo).
@@ -28,7 +34,7 @@ depthfirst( Caminho, Paragem, Destino, Solucao,Distancia)  :-
 %ex2 Selecionar apenas algumas paragens
 
 %183->182 : Vimeca
-
+%resolve_df_seleciona_operadores(183,182,['Vimeca','SCoTTURB'],H,J,K).
 resolve_df_seleciona_operadores( Comeco, Destino,ListaOperadores ,Solucao,Distancia,Tempo)  :-
     depth_first_seleciona_operadores( [], Comeco, Destino,ListaOperadores,SolucaoInvertida,Distancia),
     reverse(SolucaoInvertida,Solucao),
@@ -42,12 +48,12 @@ depth_first_seleciona_operadores( Caminho, Paragem, Destino,ListaOperadores, [(D
         member(Operador,ListaOperadores).
 
 
-depth_first_seleciona_operadores( Caminho, Paragem, End,ListaOperadores,Solucao,Distancia)  :-
+depth_first_seleciona_operadores( Caminho, Paragem, Destino,ListaOperadores,Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
-    paragem(Paragem,_,_,_,_,_,Operador,_,_,_),
+    paragem(ProxParagem,_,_,_,_,_,Operador,_,_,_),
     member(Operador,ListaOperadores),
-    \+ member( ProxParagem, Caminho),
-    depth_first_seleciona_operadores([(Paragem,Carreira) | Caminho], ProxParagem,End,ListaOperadores,Solucao,DistanciaAcumulada),
+    \+ member( (ProxParagem,_), Caminho),
+    depth_first_seleciona_operadores([(Paragem,Carreira) | Caminho], ProxParagem,Destino,ListaOperadores,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
 
 
@@ -66,15 +72,15 @@ resolve_df_exclui_operadores( Comeco, Destino,ListaOperadores ,Solucao,Distancia
 depth_first_exclui_operadores( Caminho, Paragem, Destino,ListaOperadores, [(Destino,"Fim"), (Paragem,Carreira) | Caminho],Distancia):-
         adjacencia(Paragem,Destino,Distancia,Carreira),
         paragem(Paragem,_,_,_,_,_,Operador,_,_,_),
-        \+ member(Operador,ListaOperadores).
+       \+ member(Operador,ListaOperadores).
 
 
-depth_first_exclui_operadores( Caminho, Paragem, End,ListaOperadores,Solucao,Distancia)  :-
+depth_first_exclui_operadores( Caminho, Paragem, Destino,ListaOperadores,Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
     paragem(Paragem,_,_,_,_,_,Operador,_,_,_),
     \+ member(Operador,ListaOperadores),
-    \+ member( ProxParagem, Caminho),
-    depth_first_exclui_operadores([(Paragem,Carreira) | Caminho], ProxParagem,End,ListaOperadores,Solucao,DistanciaAcumulada),
+    \+ member( (ProxParagem,_), Caminho),
+    depthfirst( [(Paragem,Carreira) | Caminho], ProxParagem,Destino,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
 
 
@@ -113,6 +119,8 @@ adiciona_numero_paragens((Caminho,Distancia),(Caminho,Distancia,NParagens)):-
 
 % ex6
 % DF 
+% 183, 609
+% set_prolog_stack(global, limit(100 00 000 000)).
 
 menor_caminho_distancia(Comeco, Destino,MenorCaminho,Distancia,Tempo):-
     statistics(runtime,[Start|_]),
@@ -254,13 +262,14 @@ depth_first_publicidade( Caminho, Paragem, Destino, [(Destino,"Fim"), (Paragem,C
 depth_first_publicidade( Caminho, Paragem, End, Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
     paragem(ProxParagem,_,_,_,_,'Yes',_,_,_,_),
-    \+ member( ProxParagem, Caminho),
+    \+ member( (ProxParagem,_), Caminho),
     depth_first_publicidade( [(Paragem,Carreira) | Caminho], ProxParagem,End,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
   
 
 
 %ex 8 
+% 262,513
 resolve_df_abrigos(Comeco,Destino,Solucao,Distancia,Tempo):-
     depth_first_abrigos( [], Comeco, Destino,SolucaoInvertida,Distancia),
     reverse(SolucaoInvertida,Solucao),
@@ -275,7 +284,7 @@ depth_first_abrigos( Caminho, Paragem, Destino, Solucao,Distancia)  :-
     adjacencia( Paragem, ProxParagem,DistanciaParagem,Carreira),
     paragem(ProxParagem,_,_,_,TipoAbrigo,_,_,_,_,_),
     member(TipoAbrigo,['Aberto dos Lados','Fechado dos Lados']),
-    \+ member( ProxParagem, Caminho),
+    \+ member( (ProxParagem,_), Caminho),
     depth_first_abrigos( [(Paragem,Carreira) | Caminho], ProxParagem,Destino,Solucao,DistanciaAcumulada),
     Distancia is DistanciaParagem + DistanciaAcumulada.
 
@@ -315,25 +324,6 @@ cria_lista_ruas_e__Freguesias([(Paragem,_)|T],[Rua|T2],[Freguesia|T3]):-
 cria_lista_ruas_e__Freguesias([],[],[]).
 
 %goal(182).
-
-
-
-
-
-
-/*
-adjacencia(183,791,87.63541293336934,1).
-adjacencia(791,595,87.63541293336934,1).
-adjacencia(595,182,421.9863463431075,1).
-adjacencia(182,499,2003.3340491291042,1).
-
-paragem(183,-103678.36,-96590.26,'Bom','Fechado dos Lados','Yes','Vimeca',286,'Rua Aquilino Ribeiro','Carnaxide e Queijas').
-paragem(791,-103705.46,-96673.6,'Bom','Fechado dos Lados','Yes','Vimeca',286,'Rua Aquilino Ribeiro','Carnaxide e Queijas').
-paragem(595,-103725.69,-95975.2,'Bom','Fechado dos Lados','Yes','Vimeca',286,'Rua Aquilino Ribeiro','Carnaxide e Queijas').
-paragem(182,-103746.76,-96396.66,'Bom','Fechado dos Lados','Yes','Vimeca',286,'Rua Aquilino Ribeiro','Carnaxide e Queijas').
-paragem(499,-103758.44,-94393.36,'Bom','Fechado dos Lados','Yes','Vimeca',286,'Rua Aquilino Ribeiro','Carnaxide e Queijas').*/
-
-
 
 
 
