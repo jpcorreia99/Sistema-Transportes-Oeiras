@@ -35,6 +35,7 @@ depthfirst( Caminho, Paragem, Destino, Solucao,Distancia)  :-
 
 %183->182 : Vimeca
 %resolve_df_seleciona_operadores(183,182,['Vimeca','SCoTTURB'],H,J,K).
+%resolve_df_seleciona_operadores(262,265,['SCoTTURB'],D,F,G).
 resolve_df_seleciona_operadores( Comeco, Destino,ListaOperadores ,Solucao,Distancia,Tempo)  :-
     depth_first_seleciona_operadores( [], Comeco, Destino,ListaOperadores,SolucaoInvertida,Distancia),
     reverse(SolucaoInvertida,Solucao),
@@ -61,7 +62,7 @@ depth_first_seleciona_operadores( Caminho, Paragem, Destino,ListaOperadores,Solu
 %ex3 Não escolher certas paragens
 
 %183->182 : Vimeca
-
+%resolve_df_exclui_operadores(262,265,['LT'],C,D,F).
 resolve_df_exclui_operadores( Comeco, Destino,ListaOperadores ,Solucao,Distancia,Tempo)  :-
     depth_first_exclui_operadores( [], Comeco, Destino,ListaOperadores,SolucaoInvertida,Distancia),
     reverse(SolucaoInvertida,Solucao),
@@ -152,6 +153,7 @@ depthfirst2( Caminho, Paragem, End, Solucao,Distancia)  :-
 
 
 % A*
+%resolve_aestrela(183,628,Dm,F,G).
 seleciona2(E, [E|Xs], Xs).
 seleciona2(E, [X|Xs], [X|Ys]) :- seleciona2(E, Xs, Ys).
 
@@ -190,7 +192,7 @@ move_aestrela2([Nodo|Caminho]/Custo/_, Destino,[ProxNodo,Nodo|Caminho]/NovoCusto
 obtem_melhor2([Caminho], Caminho) :- !.
 
 obtem_melhor2([Caminho1/Custo1/Est1,_/Custo2/Est2|Caminhos], MelhorCaminho) :-
-    Custo1 + Est1 >= Custo2 + Est2, !, % custo 1 é a soma dos caminhos até aí
+    Custo1 + Est1 > Custo2 + Est2, !, % custo 1 é a soma dos caminhos até aí
     obtem_melhor2([Caminho1/Custo1/Est1|Caminhos], MelhorCaminho).
     
 obtem_melhor2([_|Caminhos], MelhorCaminho) :- 
@@ -328,7 +330,7 @@ cria_lista_ruas_e__Freguesias([],[],[]).
 
 
 
-%183,606
+%caminho_novo(583,178,S,D,T).
 %ex1
 caminho_novo(Comeco,Destino,Caminho,Distancia,Tempo):-
     caminho_novo_aux(Comeco,0,[(Destino,"Fim")],Caminho,Distancia),
@@ -444,7 +446,7 @@ caminho_com_paragens(Comeco,Destino,Paragens,Caminho,Distancia,Tempo):-
 
 
 %breadth_first
-
+%breadth_first(183,315,S,D,T).
 
 breadth_first( Comeco, Destino, Caminho,Distancia,Tempo):- 
     breadth_first_aux( Destino, [[Comeco]], Caminho),
